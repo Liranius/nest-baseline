@@ -1,0 +1,5 @@
+engineStrict: true
+autoInstallPeers: true
+strictPeerDependencies: true
+strictDepBuilds: true
+allowBuilds: {}

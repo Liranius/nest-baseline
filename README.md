@@ -49,6 +49,19 @@ pnpm install --frozen-lockfile
 Setup was verified with fnm 1.39.0. The project accepts Node 24.22.2 and later
 24.x releases. Check the active versions with `node --version` and `pnpm --version`.
 
+### Dependency installation policy
+
+The project sets its install policy in `pnpm-workspace.yaml`. Required dependencies
+must support the active Node version. pnpm can install compatible missing peers
+automatically. An unresolved or conflicting required peer fails installation.
+
+The dependency build allowlist starts empty. An unreviewed dependency install
+script stops the install before that script runs. When adding or updating a
+dependency with such a script, inspect the published script and record the
+decision in `allowBuilds`. Use `true` for a reviewed package version that needs
+the script, or `false` to install the package with its script skipped. Verify
+the decision with a clean frozen install and `pnpm run check`.
+
 ## Compile and run the project
 
 ```bash
