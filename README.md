@@ -27,9 +27,27 @@
 
 ## Project setup
 
-```bash
-$ pnpm install
+Install [fnm](https://github.com/Schniz/fnm#installation) and enable it in your
+shell. In PowerShell, run this command for the current session or add it to your
+PowerShell profile.
+
+```powershell
+fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression
 ```
+
+From the repository root, install and select the Node version recorded in
+`.node-version`, install the pinned pnpm version, and restore the locked
+dependencies.
+
+```bash
+fnm install
+fnm use
+npm install --global pnpm@12.4.2
+pnpm install --frozen-lockfile
+```
+
+The project accepts Node 24.22.2 and later 24.x releases. Check the active
+versions with `node --version` and `pnpm --version`.
 
 ## Compile and run the project
 
