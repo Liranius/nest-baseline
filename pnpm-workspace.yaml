@@ -2,4 +2,5 @@ engineStrict: true
 autoInstallPeers: true
 strictPeerDependencies: true
 strictDepBuilds: true
-allowBuilds: {}
+allowBuilds:
+  lefthook@2.1.14: false
