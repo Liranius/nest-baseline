@@ -75,6 +75,18 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
+## Quality checks
+
+Run `pnpm run check` from the repository root. It runs `format:check`, `lint`,
+`typecheck`, `test`, `test:e2e`, and `build` in order and stops at the first
+failure. Each step can also be run with `pnpm run <script>`.
+
+Format and lint cover the application, tests, and both root Vitest configs.
+TypeScript checks the root project, including tests, without emitting files.
+The checks leave source files untouched. Vitest may write its cache under
+`node_modules/`, and the production build refreshes `dist/`. To apply
+formatting, run `pnpm run format`.
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
