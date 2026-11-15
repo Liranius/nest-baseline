@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      verified: >-
+        ${{ steps.checkout.outcome == 'success' &&
+            steps.node.outcome == 'success' &&
+            steps.pnpm.outcome == 'success' &&
+            steps.install.outcome == 'success' &&
+            steps.check.outcome == 'success' }}
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        id: node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+
+      - name: Setup pnpm
+        id: pnpm
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - name: Install dependencies
+        id: install
+        run: pnpm install --frozen-lockfile
+
+      - name: Run project checks
+        id: check
+        run: pnpm run check
+
+  quality:
+    name: ${{ github.event_name == 'pull_request' && 'Quality' || 'CI result' }}
+    needs: checks
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require successful checks
+        env:
+          CHECKS_RESULT: ${{ needs.checks.result }}
+          STEPS_VERIFIED: ${{ needs.checks.outputs.verified }}
+        run: |
+          test "$CHECKS_RESULT" = success
+          test "$STEPS_VERIFIED" = true
+
+      - name: Reject cancelled run
+        if: ${{ cancelled() }}
+        run: exit 1

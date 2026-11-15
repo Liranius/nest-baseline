@@ -73,6 +73,12 @@ Oxfmt 检查仓库中支持的文件，包括 Markdown 和 JSON，跳过锁文�
 
 质量检查保持源码原样。Vitest 可能在 `node_modules/` 下写入缓存，生产构建会生成 `dist/` 和 `tsconfig.build.tsbuildinfo`。需要写入格式化结果时，运行 `pnpm run format`。
 
+### GitHub 合并检查
+
+面向 `main` 的 PR 和推送到 `main` 的提交都会触发 CI。工作流从 `.node-version` 和 `package.json` 读取工具版本，在干净的 Ubuntu 环境中运行 `pnpm install --frozen-lockfile` 和 `pnpm run check`。检查失败时，在该次运行的 `Checks` 日志中查看首个失败步骤。[CI 工作流](.github/workflows/ci.yml)
+
+配置 `main` 分支保护时，将 GitHub Actions 在 PR 上报告的 `Quality` 设为必需检查，并要求分支与 `main` 同步后再合并。在仓库设置中只启用 **Rebase and merge**。只有环境准备、依赖安装和项目检查均实际执行成功，`Quality` 才会通过。`main` 推送的汇总结果单独命名为 `CI result`。
+
 ## 基线维护
 
 每次发布基线版本时，仓库维护者复查依赖的支持周期、检查规则的例外和仍在使用的临时方案。安全公告或工具链升级影响项目时，提前复查。升级时记录原因，运行项目检查，并验证受影响的实际行为。[质量检查](#质量检查)
