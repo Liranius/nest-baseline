@@ -46,8 +46,8 @@ npm install --global pnpm@12.4.2
 pnpm install --frozen-lockfile
 ```
 
-The project accepts Node 24.22.2 and later 24.x releases. Check the active
-versions with `node --version` and `pnpm --version`.
+Setup was verified with fnm 1.39.0. The project accepts Node 24.22.2 and later
+24.x releases. Check the active versions with `node --version` and `pnpm --version`.
 
 ## Compile and run the project
 
@@ -81,11 +81,23 @@ Run `pnpm run check` from the repository root. It runs `format:check`, `lint`,
 `typecheck`, `test`, `test:e2e`, and `build` in order and stops at the first
 failure. Each step can also be run with `pnpm run <script>`.
 
-Format and lint cover the application, tests, and both root Vitest configs.
+Oxfmt checks supported files across the repository, including Markdown and JSON.
+The lockfile, dependencies, and generated output are excluded.
+Lint covers the application, tests, and both root Vitest configs.
 TypeScript checks the root project, including tests, without emitting files.
 The checks leave source files untouched. Vitest may write its cache under
-`node_modules/`, and the production build refreshes `dist/`. To apply
+`node_modules/`, and the production build writes `dist/` and
+`tsconfig.build.tsbuildinfo`. To apply
 formatting, run `pnpm run format`.
+
+## Formatting and Git conventions
+
+Use UTF-8, LF, and two spaces. Windows batch files (`.cmd` and `.bat`) use
+CRLF on checkout. Editors preserve trailing spaces in Markdown for hard line
+breaks. TypeScript uses a 100-column print width, single quotes, and semicolons.
+
+Git ignores the private `.env`, `.env.local`, and per-environment overrides
+such as `.env.staging.local`. Use `.env.example` for shareable examples.
 
 ## Deployment
 

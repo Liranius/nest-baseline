@@ -2,7 +2,20 @@
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "singleQuote": true,
   "trailingComma": "all",
-  "printWidth": 80,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "endOfLine": "lf",
   "sortPackageJson": false,
-  "ignorePatterns": []
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/.nyc_output/**",
+    "**/.temp/**",
+    "**/.tmp/**",
+    "pnpm-lock.yaml"
+  ]
 }
