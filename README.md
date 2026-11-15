@@ -1,43 +1,18 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# nest-baseline
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 项目简介
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+`nest-baseline` 是一个单包 NestJS HTTP 服务。应用代码和单元测试位于 `src/`，HTTP 端到端测试位于 `test/`。
 
-## Description
+## 项目初始化
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-Install [fnm](https://github.com/Schniz/fnm#installation) and enable it in your
-shell. In PowerShell, run this command for the current session or add it to your
-PowerShell profile.
+安装 fnm 并在当前 shell 中启用它。使用 PowerShell 时，可在当前会话运行下面的命令，也可以把它加入 PowerShell 配置文件。[fnm 安装说明](https://github.com/Schniz/fnm#installation)
 
 ```powershell
 fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression
 ```
 
-From the repository root, install and select the Node version recorded in
-`.node-version`, install the pinned pnpm version, and restore the locked
-dependencies.
+在仓库根目录安装并切换到 `.node-version` 指定的 Node.js 版本，然后安装项目固定版本的 pnpm，按锁文件恢复依赖。
 
 ```bash
 fnm install
@@ -46,163 +21,75 @@ npm install --global pnpm@12.4.2
 pnpm install --frozen-lockfile
 ```
 
-Setup was verified with fnm 1.39.0. The project accepts Node 24.22.2 and later
-24.x releases. Check the active versions with `node --version` and `pnpm --version`.
+初始化流程已使用 fnm 1.39.0 验证。项目支持 Node.js 24.22.2 及后续 24.x 版本。用 `node --version` 和 `pnpm --version` 核对当前版本。
 
-### Dependency installation policy
+### 依赖安装策略
 
-The project sets its install policy in `pnpm-workspace.yaml`. Required dependencies
-must support the active Node version. pnpm can install compatible missing peers
-automatically. An unresolved or conflicting required peer fails installation.
+`pnpm-workspace.yaml` 定义了安装策略。必需依赖必须支持当前 Node.js 版本。pnpm 可以自动安装缺失且版本兼容的 peer 依赖（对等依赖）。如果必需的 peer 依赖无法满足或存在版本冲突，安装会失败。
 
-The dependency build allowlist starts empty. An unreviewed dependency install
-script stops the install before that script runs. When adding or updating a
-dependency with such a script, inspect the published script and record the
-decision in `allowBuilds`. Use `true` for a reviewed package version that needs
-the script, or `false` to install the package with its script skipped. Verify
-the decision with a clean frozen install and `pnpm run check`.
+依赖安装脚本的允许列表初始为空。遇到未审核的依赖脚本时，pnpm 会在执行该脚本前让安装失败。新增或升级此类依赖时，检查已发布包中的脚本，并在 `allowBuilds` 中记录决定。已审核且需要执行脚本的包版本设为 `true`，允许安装但需跳过脚本的设为 `false`。在干净目录执行冻结安装，再运行 `pnpm run check` 验证。
 
-## Run the HTTP service
+## 运行 HTTP 服务
 
-From the repository root, run `pnpm run start` for a local server or
-`pnpm run start:dev` to rebuild and restart on changes. The HTTP port defaults
-to `3000`. Set `PORT` in the server's environment to use another port.
-The starter endpoint runs without a database or credentials. Stop the
-foreground server with Ctrl+C.
+在仓库根目录运行 `pnpm run start` 启动本地服务。开发时可运行 `pnpm run start:dev`，文件变更后会重新构建并重启。HTTP 端口默认为 `3000`，可以通过服务进程的环境变量 `PORT` 覆盖。示例接口可以直接运行，无需数据库或凭据。在服务所在的终端按 Ctrl+C 停止服务。
 
-### Smoke-test the production build
+### 生产构建冒烟验证
 
-Run `pnpm run build` and wait for it to succeed. Then start the compiled
-`dist/main.js` on an available port. This PowerShell example uses port 3100.
+运行 `pnpm run build`。构建成功后，选用空闲端口启动编译后的 `dist/main.js`。下面的 PowerShell 示例使用端口 3100。
 
 ```powershell
 $env:PORT = '3100'
 pnpm run start:prod
 ```
 
-In a second PowerShell terminal, request the root endpoint on the same port.
+在第二个 PowerShell 终端请求同一端口的根接口。
 
 ```powershell
 Invoke-WebRequest -Uri http://127.0.0.1:3100/ -TimeoutSec 2 | Select-Object StatusCode, Content
 ```
 
-The service is ready when `GET /` returns HTTP `200` with the exact body
-`Hello World!`. Retry connection failures for up to 10 seconds after starting
-the server. If startup reports `EADDRINUSE`, choose a free port and repeat
-both commands. On success or failure, press Ctrl+C in the server terminal.
-The port should be free for the next run.
+当 `GET /` 返回 HTTP `200` 且正文精确匹配 `Hello World!` 时，服务就绪。如果连接失败，可在启动后的 10 秒内重试。如果启动时报 `EADDRINUSE`，在两个终端改用同一空闲端口，重新启动并请求接口。验证结束后，无论成功还是失败，都在服务终端按 Ctrl+C，再确认端口已释放，可供下次启动使用。
 
-## Run tests
+## 运行测试
 
 ```bash
-# unit tests
-$ pnpm run test
+# 单元测试
+pnpm run test
 
-# e2e tests
-$ pnpm run test:e2e
+# HTTP 端到端测试
+pnpm run test:e2e
 
-# test coverage
-$ pnpm run test:cov
+# 测试覆盖率
+pnpm run test:cov
 ```
 
-`test:e2e` starts and closes its own Nest test application and uses Supertest
-to check `GET /`. The production smoke test above also exercises the compiled
-entry point and the `start:prod` command.
+`test:e2e` 自行启动和关闭 Nest 测试应用，通过 Supertest 验证 `GET /`。要覆盖编译后的入口文件和 `start:prod` 命令，按上面的生产构建冒烟步骤验证。
 
-## Quality checks
+## 质量检查
 
-Run `pnpm run check` from the repository root. It runs `format:check`, `lint`,
-`typecheck`, `test`, `test:e2e`, and `build` in order and stops at the first
-failure. Each step can also be run with `pnpm run <script>`.
+在仓库根目录执行 `pnpm run check`。它依次运行 `format:check`、`lint`、`typecheck`、`test`、`test:e2e` 和 `build`，遇到第一项失败即停止。每一步也可以通过 `pnpm run <脚本名>` 单独运行。
 
-Oxfmt checks supported files across the repository, including Markdown and JSON.
-The lockfile, dependencies, and generated output are excluded.
-Lint covers the application, tests, and both root Vitest configs.
-TypeScript checks the root project, including tests, without emitting files.
-The checks leave source files untouched. Vitest may write its cache under
-`node_modules/`, and the production build writes `dist/` and
-`tsconfig.build.tsbuildinfo`. To apply
-formatting, run `pnpm run format`.
+Oxfmt 检查仓库中支持的文件，包括 Markdown 和 JSON，跳过锁文件、依赖目录和生成产物。Lint 覆盖应用、测试和根目录的两份 Vitest 配置。TypeScript 对包括测试在内的根项目执行类型检查，不生成文件。
 
-## Formatting and Git conventions
+质量检查保持源码原样。Vitest 可能在 `node_modules/` 下写入缓存，生产构建会生成 `dist/` 和 `tsconfig.build.tsbuildinfo`。需要写入格式化结果时，运行 `pnpm run format`。
 
-Use UTF-8, LF, and two spaces. Windows batch files (`.cmd` and `.bat`) use
-CRLF on checkout. Editors preserve trailing spaces in Markdown for hard line
-breaks. TypeScript uses a 100-column print width, single quotes, and semicolons.
+## 基线维护
 
-Git ignores the private `.env`, `.env.local`, and per-environment overrides
-such as `.env.staging.local`. Use `.env.example` for shareable examples.
+每次发布基线版本时，仓库维护者复查依赖的支持周期、检查规则的例外和仍在使用的临时方案。安全公告或工具链升级影响项目时，提前复查。升级时记录原因，运行项目检查，并验证受影响的实际行为。[质量检查](#质量检查)
 
-## Deployment
+### 属性初始化与显式 any 检查
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- 根目录 `tsconfig.json` 启用了 `strict`。`strictPropertyInitialization` 继承该设置，生产构建也继承根配置。对于必须有值的实例属性，TypeScript 会检查它是否在声明处或构造函数中完成初始化。单独验证可运行 `pnpm run typecheck`。
+- Oxlint 将 `typescript/no-explicit-any` 设为 `error`。在应用、测试或根目录的 Vitest 配置中显式使用 `any` 会使 `pnpm run lint` 失败。对于类型未知的外部输入，可先用 `unknown` 接收，再校验并收窄类型。
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+变更依赖注入方式、接入缺少类型声明的库，或升级 TypeScript、Oxlint 后，重新运行对应的检查。确需引入例外时，将范围限定到受影响的位置，记录诊断信息、保留原因、维护人和复查条件。
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
-```
+## 格式与 Git 约定
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+文件使用 UTF-8 编码、LF 换行和两个空格缩进。Windows 批处理文件（`.cmd`、`.bat`）检出时使用 CRLF。编辑器保留 Markdown 行末用于强制换行的空格。TypeScript 使用 100 列格式化宽度、单引号和分号。
 
-## Observability
+Git 忽略私有的 `.env`、`.env.local` 以及各环境的本地覆盖文件，例如 `.env.staging.local`。可共享的配置示例写在 `.env.example` 中。
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+## 许可证
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
-
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
-
-To add it to this project, run this and approve the code it prints at [observe.nestjs.com/link](https://observe.nestjs.com/link) - signing up for free if you have no account:
-
-```bash
-$ npx @nestjs/observe link
-```
-
-It installs `@nestjs/observe`, wires it into `AppModule` and `main.ts`, and writes the app key and secret into `.env`, which every `nest start` script (`start`, `start:dev`, `start:debug`) then loads. In production, set `OBSERVE_APP_KEY` and `OBSERVE_APP_SECRET` in the environment instead.
-
-Or do it by hand:
-
-```bash
-$ pnpm install @nestjs/observe
-```
-
-Then follow the [setup guide](https://docs.nestjs.com/observability/sdk) - it takes a single import and an app key.
-
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+本项目采用 [MIT 许可证](LICENSE)。
