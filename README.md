@@ -62,18 +62,35 @@ decision in `allowBuilds`. Use `true` for a reviewed package version that needs
 the script, or `false` to install the package with its script skipped. Verify
 the decision with a clean frozen install and `pnpm run check`.
 
-## Compile and run the project
+## Run the HTTP service
 
-```bash
-# development
-$ pnpm run start
+From the repository root, run `pnpm run start` for a local server or
+`pnpm run start:dev` to rebuild and restart on changes. The HTTP port defaults
+to `3000`. Set `PORT` in the server's environment to use another port.
+The starter endpoint runs without a database or credentials. Stop the
+foreground server with Ctrl+C.
 
-# watch mode
-$ pnpm run start:dev
+### Smoke-test the production build
 
-# production mode
-$ pnpm run start:prod
+Run `pnpm run build` and wait for it to succeed. Then start the compiled
+`dist/main.js` on an available port. This PowerShell example uses port 3100.
+
+```powershell
+$env:PORT = '3100'
+pnpm run start:prod
 ```
+
+In a second PowerShell terminal, request the root endpoint on the same port.
+
+```powershell
+Invoke-WebRequest -Uri http://127.0.0.1:3100/ -TimeoutSec 2 | Select-Object StatusCode, Content
+```
+
+The service is ready when `GET /` returns HTTP `200` with the exact body
+`Hello World!`. Retry connection failures for up to 10 seconds after starting
+the server. If startup reports `EADDRINUSE`, choose a free port and repeat
+both commands. On success or failure, press Ctrl+C in the server terminal.
+The port should be free for the next run.
 
 ## Run tests
 
@@ -87,6 +104,10 @@ $ pnpm run test:e2e
 # test coverage
 $ pnpm run test:cov
 ```
+
+`test:e2e` starts and closes its own Nest test application and uses Supertest
+to check `GET /`. The production smoke test above also exercises the compiled
+entry point and the `start:prod` command.
 
 ## Quality checks
 
