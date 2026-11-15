@@ -19,6 +19,7 @@ fnm install
 fnm use
 npm install --global pnpm@12.4.2
 pnpm install --frozen-lockfile
+pnpm run hooks:install
 ```
 
 初始化流程已使用 fnm 1.39.0 验证。项目支持 Node.js 24.22.2 及后续 24.x 版本。用 `node --version` 和 `pnpm --version` 核对当前版本。
@@ -27,7 +28,7 @@ pnpm install --frozen-lockfile
 
 `pnpm-workspace.yaml` 定义了安装策略。必需依赖必须支持当前 Node.js 版本。pnpm 可以自动安装缺失且版本兼容的 peer 依赖（对等依赖）。如果必需的 peer 依赖无法满足或存在版本冲突，安装会失败。
 
-依赖安装脚本的允许列表初始为空。遇到未审核的依赖脚本时，pnpm 会在执行该脚本前让安装失败。新增或升级此类依赖时，检查已发布包中的脚本，并在 `allowBuilds` 中记录决定。已审核且需要执行脚本的包版本设为 `true`，允许安装但需跳过脚本的设为 `false`。在干净目录执行冻结安装，再运行 `pnpm run check` 验证。
+遇到未审核的依赖脚本时，pnpm 会在执行该脚本前让安装失败。新增或升级此类依赖时，检查已发布包中的脚本，并在 `allowBuilds` 中记录决定。已审核且需要执行脚本的包版本设为 `true`，允许安装但需跳过脚本的设为 `false`。Lefthook 的安装脚本只负责注册 Git 钩子，本项目跳过该脚本，由开发者在本地克隆中显式运行 `pnpm run hooks:install`。在干净目录执行冻结安装，再运行 `pnpm run check` 验证。
 
 ## 运行 HTTP 服务
 
@@ -99,6 +100,16 @@ Dependabot 每周检查 CI 工作流引用的 GitHub Actions，有可用更新�
 文件使用 UTF-8 编码、LF 换行和两个空格缩进。Windows 批处理文件（`.cmd`、`.bat`）检出时使用 CRLF。编辑器保留 Markdown 行末用于强制换行的空格。TypeScript 使用 100 列格式化宽度、单引号和分号。
 
 Git 忽略私有的 `.env`、`.env.local` 以及各环境的本地覆盖文件，例如 `.env.staging.local`。可共享的配置示例写在 `.env.example` 中。
+
+### 提交前检查
+
+在项目的 Node 和 pnpm 环境中提交。安装钩子后，`git commit` 会先用 Oxlint 修复暂存的 `src/`、`test/` 源文件和根目录两份 Vitest 配置，再用 Oxfmt 格式化它支持的暂存文件。两步顺序执行，修复结果自动重新暂存。遇到无法修复的错误时提交会停止，可用 `git diff --cached` 复核暂存结果，用 `git diff` 查看保留的未暂存改动。[Lefthook 配置](lefthook.yml)
+
+同一文件部分暂存时，Lefthook 会临时隐藏未暂存的修改。若恢复这些修改时与自动修复冲突，提交会中止。核对两份差异，手工整理冲突行，再用 `git add -p` 选择本次要提交的内容。
+
+暂存格式、Lint、TypeScript、测试、构建或依赖配置的变更时，钩子还会运行完整的 `pnpm run check`，覆盖项目级类型感知 Lint、类型检查、测试和构建。CI 在每个 PR 上独立运行同一命令。[质量检查](#质量检查)
+
+提交 PR 前按逻辑整理本地历史。一个完整变更可归为一个提交，值得独立审查或回退的步骤可分为多个提交。每个保留的提交应可构建并带上对应测试。合并方式见 [GitHub 合并检查](#github-合并检查)。
 
 ## 许可证
 

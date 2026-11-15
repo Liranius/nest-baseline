@@ -1,0 +1,26 @@
+$schema: ./node_modules/lefthook/schema.json
+glob_matcher: doublestar
+
+pre-commit:
+  piped: true
+  jobs:
+    - name: oxlint
+      glob:
+        - '{src,test}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}'
+        - 'vitest.config{,.e2e}.ts'
+      run: pnpm exec oxlint --fix --no-error-on-unmatched-pattern -- {staged_files}
+      stage_fixed: true
+
+    - name: format
+      exclude: pnpm-lock.yaml
+      run: pnpm exec oxfmt --write --no-error-on-unmatched-pattern -- {staged_files}
+      stage_fixed: true
+
+    - name: project-checks
+      skip:
+        - run: >-
+            git diff --cached --quiet --
+            .oxfmtrc.json .oxlintrc.json .editorconfig .gitignore .gitattributes
+            'tsconfig*.json' 'vitest.config*.ts' nest-cli.json
+            .node-version package.json pnpm-lock.yaml pnpm-workspace.yaml lefthook.yml
+      run: pnpm run check
