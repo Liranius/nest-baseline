@@ -83,6 +83,10 @@ Oxfmt 检查仓库中支持的文件，包括 Markdown 和 JSON，跳过锁文�
 
 每次发布基线版本时，仓库维护者复查依赖的支持周期、检查规则的例外和仍在使用的临时方案。安全公告或工具链升级影响项目时，提前复查。升级时记录原因，运行项目检查，并验证受影响的实际行为。[质量检查](#质量检查)
 
+仓库维护者收到 Dependabot 漏洞告警后，复查受影响的生产或开发依赖并记录修复决定。暂缓修复时注明原因和复查条件。[漏洞告警](https://github.com/Liranius/nest-baseline/security/dependabot)
+
+Dependabot 每周检查 CI 工作流引用的 GitHub Actions，有可用更新时提出 PR。维护者审查版本和固定的提交 SHA，决定采用的更新须通过 `Quality` 后合并。[Dependabot 配置](.github/dependabot.yml)
+
 ### 属性初始化与显式 any 检查
 
 - 根目录 `tsconfig.json` 启用了 `strict`。`strictPropertyInitialization` 继承该设置，生产构建也继承根配置。对于必须有值的实例属性，TypeScript 会检查它是否在声明处或构造函数中完成初始化。单独验证可运行 `pnpm run typecheck`。
