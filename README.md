@@ -2,7 +2,7 @@
 
 ## 项目简介
 
-`nest-baseline` 是一个单包 NestJS HTTP 服务。应用代码和单元测试位于 `src/`，HTTP 端到端测试位于 `test/`。
+`nest-baseline` 是一个单包 NestJS HTTP 服务。应用代码与服务单元测试位于 `src/`，HTTP 端到端测试和知识脚本测试位于 `test/`。
 
 ## 项目初始化
 
@@ -70,7 +70,7 @@ pnpm run test:cov
 
 在仓库根目录执行 `pnpm run check`。它依次运行 `format:check`、`lint`、`typecheck`、`test`、`test:e2e` 和 `build`，遇到第一项失败即停止。每一步也可以通过 `pnpm run <脚本名>` 单独运行。
 
-Oxfmt 检查仓库中支持的文件，包括 Markdown 和 JSON，跳过锁文件、依赖目录和生成产物。Lint 覆盖应用、测试和根目录的两份 Vitest 配置。TypeScript 对包括测试在内的根项目执行类型检查，不生成文件。
+Oxfmt 检查仓库中支持的文件，包括 Markdown 和 JSON，跳过锁文件、依赖目录、生成产物和原样保留的第三方技能。Lint 覆盖应用、测试、项目脚本和根目录的两份 Vitest 配置。TypeScript 对包括测试在内的根项目执行类型检查，不生成文件。
 
 质量检查保持源码原样。Vitest 可能在 `node_modules/` 下写入缓存，生产构建会生成 `dist/` 和 `tsconfig.build.tsbuildinfo`。需要写入格式化结果时，运行 `pnpm run format`。
 
@@ -84,7 +84,9 @@ Oxfmt 检查仓库中支持的文件，包括 Markdown 和 JSON，跳过锁文�
 
 每次发布基线版本时，仓库维护者复查依赖的支持周期、检查规则的例外和仍在使用的临时方案。安全公告或工具链升级影响项目时，提前复查。升级时记录原因，运行项目检查，并验证受影响的实际行为。[质量检查](#质量检查)
 
-仓库维护者收到 Dependabot 漏洞告警后，复查受影响的生产或开发依赖并记录修复决定。暂缓修复时注明原因和复查条件。[漏洞告警](https://github.com/Liranius/nest-baseline/security/dependabot)
+仓库维护者收到 Dependabot 告警后，核查依赖在服务、构建或 CI 中的实际用途。对 critical 和 high 告警，在下一个工作日结束前完成初次影响判断。其他告警在下次基线发布前复核。[漏洞告警](https://github.com/Liranius/nest-baseline/security/dependabot)
+
+若 PR 引入或扩大了已确认可触达的 high 或 critical 风险，维护者在修复、移除依赖或记录有效缓解措施后再合并。在告警或相关 PR 中记录责任人、决定和依据；暂缓项另记复查日期。在到期、发布基线、修复版本可用或依赖用途变化时复查。合并时由维护者执行这项审查，GitHub 的自动必需检查为 `Quality`。
 
 Dependabot 每周检查 CI 工作流引用的 GitHub Actions，有可用更新时提出 PR。维护者审查版本和固定的提交 SHA，决定采用的更新须通过 `Quality` 后合并。[Dependabot 配置](.github/dependabot.yml)
 
@@ -103,7 +105,7 @@ Git 忽略私有的 `.env`、`.env.local` 以及各环境的本地覆盖文件�
 
 ### 提交前检查
 
-在项目的 Node 和 pnpm 环境中提交。安装钩子后，`git commit` 会先用 Oxlint 修复暂存的 `src/`、`test/` 源文件和根目录两份 Vitest 配置，再用 Oxfmt 格式化它支持的暂存文件。两步顺序执行，修复结果自动重新暂存。遇到无法修复的错误时提交会停止，可用 `git diff --cached` 复核暂存结果，用 `git diff` 查看保留的未暂存改动。[Lefthook 配置](lefthook.yml)
+在项目的 Node 和 pnpm 环境中提交。安装钩子后，`git commit` 会先用 Oxlint 修复暂存的 `src/`、`test/`、`scripts/` 文件和根目录两份 Vitest 配置，再用 Oxfmt 格式化它支持的暂存文件。两步顺序执行，修复结果自动重新暂存。遇到无法修复的错误时提交会停止，可用 `git diff --cached` 复核暂存结果，用 `git diff` 查看保留的未暂存改动。[Lefthook 配置](lefthook.yml)
 
 同一文件部分暂存时，Lefthook 会临时隐藏未暂存的修改。若恢复这些修改时与自动修复冲突，提交会中止。核对两份差异，手工整理冲突行，再用 `git add -p` 选择本次要提交的内容。
 
@@ -111,6 +113,10 @@ Git 忽略私有的 `.env`、`.env.local` 以及各环境的本地覆盖文件�
 
 提交 PR 前按逻辑整理本地历史。一个完整变更可归为一个提交，值得独立审查或回退的步骤可分为多个提交。每个保留的提交应可构建并带上对应测试。合并方式见 [GitHub 合并检查](#github-合并检查)。
 
+## 项目知识
+
+在当前 Git worktree 中使用 Basic Memory 保存工程决策和排障结论。安装 [uv](https://docs.astral.sh/uv/getting-started/installation/) 后运行 `pnpm knowledge:setup`，再用 `pnpm knowledge:doctor` 检查项目路径、MCP 和 SessionStart。普通安装、测试和 CI 可以独立运行。配置位置、日常命令和验收范围见[项目知识指南](docs/project-knowledge.md)。
+
 ## 许可证
 
-本项目采用 [MIT 许可证](LICENSE)。
+本项目自有代码采用 [MIT 许可证](LICENSE)。知识工具所用参考实现、官方技能及派生模板的来源与许可证见[第三方说明](THIRD_PARTY_NOTICES.md)。

@@ -16,6 +16,7 @@
     "**/.nyc_output/**",
     "**/.temp/**",
     "**/.tmp/**",
+    ".agents/skills/{bm-orient,bm-decide,bm-remember,bm-writing,bm-checkpoint}/**",
     "pnpm-lock.yaml"
   ]
 }
