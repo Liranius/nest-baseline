@@ -4,7 +4,9 @@
 
 在仓库根目录执行命令。Node 版本见 [.node-version](.node-version)，pnpm 版本和项目命令见 [package.json](package.json)。安装步骤见 [README](README.md#项目初始化)。
 
-服务从 [src/main.ts](src/main.ts) 启动，模块在 [src/app.module.ts](src/app.module.ts) 装配。单元测试与源码相邻，HTTP 端到端测试位于 [test/](test/)。
+服务从 [src/main.ts](src/main.ts) 启动，模块在 [src/app.module.ts](src/app.module.ts) 装配。服务单元测试与源码相邻，HTTP 端到端测试和知识脚本测试位于 [test/](test/)。
+
+查阅或修订项目决策时使用[项目知识维护技能](.agents/skills/project-knowledge/SKILL.md)。开始工作时记下当前提交，以便交付前核对来源变更。初始化与检索命令见[项目知识](README.md#项目知识)。
 
 ## 工作约定
 

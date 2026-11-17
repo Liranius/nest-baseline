@@ -1,0 +1,17 @@
+{
+  "basicMemory": {
+    "primaryProject": "nest-baseline",
+    "secondaryProjects": [],
+    "teamProjects": {},
+    "projectMode": "local",
+    "focus": "code/dev",
+    "sessionProfile": "coding",
+    "rememberFolder": "codex/remember",
+    "captureFolder": "codex/checkpoints",
+    "recallTimeframe": "7d",
+    "checkpointOnCompact": true,
+    "captureEvents": true,
+    "placementConventions": "Put decisions in codex/decisions/ and checkpoints in codex/checkpoints/.",
+    "repository": "Liranius/nest-baseline"
+  }
+}
