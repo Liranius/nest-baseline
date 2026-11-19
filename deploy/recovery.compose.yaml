@@ -1,0 +1,40 @@
+x-recovery-db: &recovery-db
+  image: postgres:18@sha256:e754b839f447639b7004895f4d8a4bfcb4e9dbe3a1bc035f27f646562a16fd61
+  environment:
+    POSTGRES_DB: staging
+    POSTGRES_USER: booking
+    POSTGRES_PASSWORD: ${DB_PASS}
+  healthcheck:
+    test: [CMD, pg_isready, -U, booking, -d, staging]
+    interval: 1s
+    timeout: 2s
+    retries: 30
+services:
+  receiver-db:
+    <<: *recovery-db
+    volumes: [receiver-data:/var/lib/postgresql]
+  rejected-db:
+    <<: *recovery-db
+    volumes: [rejected-data:/var/lib/postgresql]
+  restored-db:
+    <<: *recovery-db
+    volumes: [restored-data:/var/lib/postgresql]
+  observer:
+    image: ${NEW_IMAGE}
+    network_mode: service:proxy
+    command: [node, /app/observe-callbacks.mjs]
+    volumes: ['./observe-callbacks.mjs:/app/observe-callbacks.mjs:ro']
+  receiver-a:
+    environment:
+      PORT: '46201'
+      RECEIVER_DATABASE_URL: ${RECEIVER_DATABASE_URL}
+  receiver-b:
+    environment:
+      PORT: '46202'
+      RECEIVER_DATABASE_URL: ${RECEIVER_DATABASE_URL}
+  job:
+    volumes: ['./verify-recovery.mjs:/app/verify-recovery.mjs:ro']
+volumes:
+  receiver-data: {}
+  rejected-data: {}
+  restored-data: {}
