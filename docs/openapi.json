@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Equipment Booking API",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Shared lab equipment. Availability is expressed in half-open UTC intervals [from,to). Error bodies use stable machine-readable codes."
   },
   "security": [
@@ -284,6 +284,25 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Unexpected transaction failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["statusCode", "message"],
+                  "properties": {
+                    "statusCode": {
+                      "const": 500
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -420,6 +439,25 @@
                       }
                     }
                   ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected transaction failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["statusCode", "message"],
+                  "properties": {
+                    "statusCode": {
+                      "const": 500
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -958,6 +996,237 @@
           }
         }
       }
+    },
+    "/v1/reservations/{id}/notifications": {
+      "get": {
+        "operationId": "listNotifications",
+        "description": "Administrator only. Lists new status events in version order, including events awaiting fan-out and all replay operators.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notifications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "INVALID_INPUT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["INVALID_INPUT"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["UNAUTHORIZED"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["FORBIDDEN"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["NOT_FOUND"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notification-deliveries/{id}/replay": {
+      "post": {
+        "operationId": "replayExhaustedDelivery",
+        "description": "Administrator only. Opens a new attempt round for an exhausted delivery, retaining its message ID and history.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Replay queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deliveryId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["deliveryId"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["UNAUTHORIZED"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["FORBIDDEN"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["NOT_FOUND"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "DELIVERY_NOT_EXHAUSTED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1134,7 +1403,8 @@
               "OUTSIDE_PICKUP_WINDOW",
               "EQUIPMENT_IN_USE",
               "NOT_CHECKED_OUT",
-              "HANDOVER_EXISTS"
+              "HANDOVER_EXISTS",
+              "DELIVERY_NOT_EXHAUSTED"
             ]
           },
           "message": {
@@ -1269,6 +1539,266 @@
         },
         "required": ["reservationId", "equipmentId", "reservationStatus", "coverage", "events"],
         "additionalProperties": false
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "organizationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "integer",
+            "enum": [1, 2]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deliveryId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "enum": ["queued", "pending", "succeeded", "failed", "relay_failed", "unrouted"]
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "lastError": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "failureReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "nextAttemptAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "replays": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "actorId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": ["actorId", "at"],
+              "additionalProperties": false
+            }
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "attempt": {
+                  "type": "integer"
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "statusCode": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "error": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": ["attempt", "at", "statusCode", "error"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "eventId",
+          "organizationId",
+          "version",
+          "occurredAt",
+          "deliveryId",
+          "status",
+          "attempts",
+          "lastError",
+          "failureReason",
+          "nextAttemptAt",
+          "replays",
+          "history"
+        ],
+        "additionalProperties": false
+      },
+      "CompanyWebhook": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "enum": ["reservation.confirmed", "reservation.cancelled"]
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "eventId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "organizationId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "reservationId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "equipmentId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "from": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "to": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "occurredAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "version": {
+                "type": "integer",
+                "enum": [1, 2]
+              }
+            },
+            "required": [
+              "eventId",
+              "organizationId",
+              "reservationId",
+              "equipmentId",
+              "from",
+              "to",
+              "occurredAt",
+              "version"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": ["type", "timestamp", "data"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "webhooks": {
+    "reservationStatus": {
+      "post": {
+        "operationId": "receiveReservationStatus",
+        "security": [],
+        "description": "Delivered to the preconfigured endpoint for this organization. Verify the Standard Webhooks signature and timestamp on the original body. eventId equals webhook-id. Confirmed has version 1, cancelled version 2.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "webhook-id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "webhook-timestamp",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "webhook-signature",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyWebhook"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Accepted, including duplicates and older versions"
+          },
+          "400": {
+            "description": "Invalid notification"
+          },
+          "401": {
+            "description": "Invalid signature or timestamp"
+          },
+          "403": {
+            "description": "Wrong organization"
+          }
+        }
       }
     }
   }

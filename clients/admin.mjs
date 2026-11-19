@@ -1,5 +1,11 @@
 import { BookingClient, loginFromEnv, printResult } from './http.mjs';
 export class AdminClient extends BookingClient {
+  notifications(id) {
+    return this.request('/reservations/' + id + '/notifications');
+  }
+  replay(id) {
+    return this.request('/notification-deliveries/' + id + '/replay', { method: 'POST' });
+  }
   checkout(id) {
     return this.request('/reservations/' + id + '/checkout', { method: 'PUT' });
   }
@@ -27,6 +33,8 @@ if (import.meta.main) {
   const [action, ...args] = process.argv.slice(2);
   if (action === 'me') printResult(await client.me());
   else if (action === 'list') printResult(await client.list());
+  else if (action === 'notifications') printResult(await client.notifications(...args));
+  else if (action === 'replay') printResult(await client.replay(...args));
   else if (action === 'checkout') printResult(await client.checkout(...args));
   else if (action === 'return') printResult(await client.receive(...args));
   else if (action === 'handover') printResult(await client.handover(...args));
@@ -37,6 +45,6 @@ if (import.meta.main) {
     if (devices.some((device) => device.availability.status >= 400)) process.exitCode = 1;
   } else
     throw new Error(
-      'Expected me, list, inspect FROM TO, handover ID, checkout ID, return ID or audit ID',
+      'Expected me, list, inspect FROM TO, handover ID, checkout ID, return ID, audit ID, notifications ID or replay DELIVERY_ID',
     );
 }
