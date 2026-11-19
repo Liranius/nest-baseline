@@ -1,0 +1,976 @@
+{
+  "startedUtc": "2026-11-19T14:25:30.468Z",
+  "passed": true,
+  "config": {
+    "clientsPerRound": 16,
+    "warmupRounds": 5,
+    "measuredRounds": 50,
+    "companies": 2,
+    "clientsPerCompanyPerInstance": 4,
+    "apiProcesses": 2,
+    "requestTimeoutMs": 8000
+  },
+  "environment": {
+    "revision": "c11621a9cb27f85f211e1f4e157994c8ae643273",
+    "dirtyWorktree": false,
+    "node": "v24.22.2",
+    "packageManager": "pnpm/12.4.2",
+    "os": "win32 10.0.26300",
+    "arch": "x64",
+    "cpu": "12th Gen Intel(R) Core(TM) i9-12900HX",
+    "logicalCpus": 24,
+    "postgres": "18.7 (Debian 18.7-1.pgdg13+2)"
+  },
+  "loginMs": 463.073,
+  "equipmentId": "30000000-0000-4000-8000-000000000001",
+  "warmup": {
+    "requests": 80,
+    "wallMs": 164.416,
+    "requestsPerSecond": 486.572,
+    "latencyMs": {
+      "p50": 23.473,
+      "p95": 40.618,
+      "p99": 48.043,
+      "max": 48.043
+    },
+    "byInstance": [
+      {
+        "instance": 1,
+        "requests": 40,
+        "responses": 40
+      },
+      {
+        "instance": 2,
+        "requests": 40,
+        "responses": 40
+      }
+    ],
+    "successes": 5,
+    "expectedConflicts": 75,
+    "timeouts": 0,
+    "connectionsFailed": 0,
+    "http5xx": 0,
+    "contractErrors": 0,
+    "wrongConflictCodes": 0,
+    "unexpectedErrors": 0,
+    "unexpectedErrorRate": 0,
+    "rounds": [
+      {
+        "round": 1,
+        "from": "2042-01-01T00:00:00.000Z",
+        "to": "2042-01-01T00:01:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 5,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "7c7e91c7-67af-4765-b0a8-065ea2d11d35"
+        },
+        "errors": [],
+        "databaseIds": ["7c7e91c7-67af-4765-b0a8-065ea2d11d35"],
+        "passed": true
+      },
+      {
+        "round": 2,
+        "from": "2042-01-01T00:01:00.000Z",
+        "to": "2042-01-01T00:02:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "4851a329-0237-4f52-8cc6-25f2a19d3fe1"
+        },
+        "errors": [],
+        "databaseIds": ["4851a329-0237-4f52-8cc6-25f2a19d3fe1"],
+        "passed": true
+      },
+      {
+        "round": 3,
+        "from": "2042-01-01T00:02:00.000Z",
+        "to": "2042-01-01T00:03:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 1,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "31dd446e-2203-4f80-89dd-0f1334ed954e"
+        },
+        "errors": [],
+        "databaseIds": ["31dd446e-2203-4f80-89dd-0f1334ed954e"],
+        "passed": true
+      },
+      {
+        "round": 4,
+        "from": "2042-01-01T00:03:00.000Z",
+        "to": "2042-01-01T00:04:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 3,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "ba8495b6-2546-4c68-ba80-895b1655b893"
+        },
+        "errors": [],
+        "databaseIds": ["ba8495b6-2546-4c68-ba80-895b1655b893"],
+        "passed": true
+      },
+      {
+        "round": 5,
+        "from": "2042-01-01T00:04:00.000Z",
+        "to": "2042-01-01T00:05:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 1,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "25832372-fe72-4d4e-be6c-72d8303d4aa8"
+        },
+        "errors": [],
+        "databaseIds": ["25832372-fe72-4d4e-be6c-72d8303d4aa8"],
+        "passed": true
+      }
+    ]
+  },
+  "measured": {
+    "requests": 800,
+    "wallMs": 1135.531,
+    "requestsPerSecond": 704.516,
+    "latencyMs": {
+      "p50": 16.757,
+      "p95": 22.022,
+      "p99": 23.248,
+      "max": 26.525
+    },
+    "byInstance": [
+      {
+        "instance": 1,
+        "requests": 400,
+        "responses": 400
+      },
+      {
+        "instance": 2,
+        "requests": 400,
+        "responses": 400
+      }
+    ],
+    "successes": 50,
+    "expectedConflicts": 750,
+    "timeouts": 0,
+    "connectionsFailed": 0,
+    "http5xx": 0,
+    "contractErrors": 0,
+    "wrongConflictCodes": 0,
+    "unexpectedErrors": 0,
+    "unexpectedErrorRate": 0,
+    "rounds": [
+      {
+        "round": 1,
+        "from": "2042-01-01T00:05:00.000Z",
+        "to": "2042-01-01T00:06:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 6,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "1906fa83-a396-4977-8ffa-a100d8ce7df0"
+        },
+        "errors": [],
+        "databaseIds": ["1906fa83-a396-4977-8ffa-a100d8ce7df0"],
+        "passed": true
+      },
+      {
+        "round": 2,
+        "from": "2042-01-01T00:06:00.000Z",
+        "to": "2042-01-01T00:07:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 1,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "4e7a1011-623b-48b7-878b-f53092ee8e62"
+        },
+        "errors": [],
+        "databaseIds": ["4e7a1011-623b-48b7-878b-f53092ee8e62"],
+        "passed": true
+      },
+      {
+        "round": 3,
+        "from": "2042-01-01T00:07:00.000Z",
+        "to": "2042-01-01T00:08:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 3,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "6435f301-a49a-48a0-a135-228c8342e2f6"
+        },
+        "errors": [],
+        "databaseIds": ["6435f301-a49a-48a0-a135-228c8342e2f6"],
+        "passed": true
+      },
+      {
+        "round": 4,
+        "from": "2042-01-01T00:08:00.000Z",
+        "to": "2042-01-01T00:09:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 5,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "798d50c7-e7af-4185-9ae1-bc7254e9a0c7"
+        },
+        "errors": [],
+        "databaseIds": ["798d50c7-e7af-4185-9ae1-bc7254e9a0c7"],
+        "passed": true
+      },
+      {
+        "round": 5,
+        "from": "2042-01-01T00:09:00.000Z",
+        "to": "2042-01-01T00:10:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 4,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "728ea090-2e3e-4f41-813c-7ada0a02c1c9"
+        },
+        "errors": [],
+        "databaseIds": ["728ea090-2e3e-4f41-813c-7ada0a02c1c9"],
+        "passed": true
+      },
+      {
+        "round": 6,
+        "from": "2042-01-01T00:10:00.000Z",
+        "to": "2042-01-01T00:11:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 11,
+          "company": "B",
+          "instance": 1,
+          "reservationId": "80eb1117-fbef-411d-9d07-53a92fda4240"
+        },
+        "errors": [],
+        "databaseIds": ["80eb1117-fbef-411d-9d07-53a92fda4240"],
+        "passed": true
+      },
+      {
+        "round": 7,
+        "from": "2042-01-01T00:11:00.000Z",
+        "to": "2042-01-01T00:12:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 6,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "65b7193d-274a-4be2-a3ef-49565fb2e435"
+        },
+        "errors": [],
+        "databaseIds": ["65b7193d-274a-4be2-a3ef-49565fb2e435"],
+        "passed": true
+      },
+      {
+        "round": 8,
+        "from": "2042-01-01T00:12:00.000Z",
+        "to": "2042-01-01T00:13:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 11,
+          "company": "B",
+          "instance": 1,
+          "reservationId": "51656c01-e945-41aa-93e2-3f87b83ed11a"
+        },
+        "errors": [],
+        "databaseIds": ["51656c01-e945-41aa-93e2-3f87b83ed11a"],
+        "passed": true
+      },
+      {
+        "round": 9,
+        "from": "2042-01-01T00:13:00.000Z",
+        "to": "2042-01-01T00:14:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "406069cb-4a70-4c11-8768-8eaefb23fe80"
+        },
+        "errors": [],
+        "databaseIds": ["406069cb-4a70-4c11-8768-8eaefb23fe80"],
+        "passed": true
+      },
+      {
+        "round": 10,
+        "from": "2042-01-01T00:14:00.000Z",
+        "to": "2042-01-01T00:15:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 12,
+          "company": "B",
+          "instance": 2,
+          "reservationId": "97199e48-7557-4500-82aa-947f2477770b"
+        },
+        "errors": [],
+        "databaseIds": ["97199e48-7557-4500-82aa-947f2477770b"],
+        "passed": true
+      },
+      {
+        "round": 11,
+        "from": "2042-01-01T00:15:00.000Z",
+        "to": "2042-01-01T00:16:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 1,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "6adac923-2095-4920-a396-d7556123c85e"
+        },
+        "errors": [],
+        "databaseIds": ["6adac923-2095-4920-a396-d7556123c85e"],
+        "passed": true
+      },
+      {
+        "round": 12,
+        "from": "2042-01-01T00:16:00.000Z",
+        "to": "2042-01-01T00:17:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 12,
+          "company": "B",
+          "instance": 2,
+          "reservationId": "5a06c40f-0f2f-4703-80a3-e65dee18c86d"
+        },
+        "errors": [],
+        "databaseIds": ["5a06c40f-0f2f-4703-80a3-e65dee18c86d"],
+        "passed": true
+      },
+      {
+        "round": 13,
+        "from": "2042-01-01T00:17:00.000Z",
+        "to": "2042-01-01T00:18:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 1,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "5d470379-0efa-4ac7-a1e6-778dd30367e9"
+        },
+        "errors": [],
+        "databaseIds": ["5d470379-0efa-4ac7-a1e6-778dd30367e9"],
+        "passed": true
+      },
+      {
+        "round": 14,
+        "from": "2042-01-01T00:18:00.000Z",
+        "to": "2042-01-01T00:19:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 7,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "000dc0a9-abc8-4c68-97ad-d5c2c6ac7775"
+        },
+        "errors": [],
+        "databaseIds": ["000dc0a9-abc8-4c68-97ad-d5c2c6ac7775"],
+        "passed": true
+      },
+      {
+        "round": 15,
+        "from": "2042-01-01T00:19:00.000Z",
+        "to": "2042-01-01T00:20:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 7,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "480f40bc-3b7d-416f-aaf5-19d8eefea44e"
+        },
+        "errors": [],
+        "databaseIds": ["480f40bc-3b7d-416f-aaf5-19d8eefea44e"],
+        "passed": true
+      },
+      {
+        "round": 16,
+        "from": "2042-01-01T00:20:00.000Z",
+        "to": "2042-01-01T00:21:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 4,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "676f97e1-5352-4291-a23d-137fc9869591"
+        },
+        "errors": [],
+        "databaseIds": ["676f97e1-5352-4291-a23d-137fc9869591"],
+        "passed": true
+      },
+      {
+        "round": 17,
+        "from": "2042-01-01T00:21:00.000Z",
+        "to": "2042-01-01T00:22:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "336247b7-677b-4d26-95ad-5ae13749bde1"
+        },
+        "errors": [],
+        "databaseIds": ["336247b7-677b-4d26-95ad-5ae13749bde1"],
+        "passed": true
+      },
+      {
+        "round": 18,
+        "from": "2042-01-01T00:22:00.000Z",
+        "to": "2042-01-01T00:23:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 1,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "4487b4f1-3823-4a31-9b67-339692e87620"
+        },
+        "errors": [],
+        "databaseIds": ["4487b4f1-3823-4a31-9b67-339692e87620"],
+        "passed": true
+      },
+      {
+        "round": 19,
+        "from": "2042-01-01T00:23:00.000Z",
+        "to": "2042-01-01T00:24:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 7,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "8909299b-0312-4680-a677-6e91069ba5f9"
+        },
+        "errors": [],
+        "databaseIds": ["8909299b-0312-4680-a677-6e91069ba5f9"],
+        "passed": true
+      },
+      {
+        "round": 20,
+        "from": "2042-01-01T00:24:00.000Z",
+        "to": "2042-01-01T00:25:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 10,
+          "company": "B",
+          "instance": 2,
+          "reservationId": "08c4945b-9758-4dc1-a225-e801df7e4cf5"
+        },
+        "errors": [],
+        "databaseIds": ["08c4945b-9758-4dc1-a225-e801df7e4cf5"],
+        "passed": true
+      },
+      {
+        "round": 21,
+        "from": "2042-01-01T00:25:00.000Z",
+        "to": "2042-01-01T00:26:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 4,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "58337368-9eba-4898-bd7f-529ae830387f"
+        },
+        "errors": [],
+        "databaseIds": ["58337368-9eba-4898-bd7f-529ae830387f"],
+        "passed": true
+      },
+      {
+        "round": 22,
+        "from": "2042-01-01T00:26:00.000Z",
+        "to": "2042-01-01T00:27:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "829702c9-28e4-40ba-9450-3e7e843a5d51"
+        },
+        "errors": [],
+        "databaseIds": ["829702c9-28e4-40ba-9450-3e7e843a5d51"],
+        "passed": true
+      },
+      {
+        "round": 23,
+        "from": "2042-01-01T00:27:00.000Z",
+        "to": "2042-01-01T00:28:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 9,
+          "company": "B",
+          "instance": 1,
+          "reservationId": "9f49edf3-a172-4cbd-9937-7793cb6d3e05"
+        },
+        "errors": [],
+        "databaseIds": ["9f49edf3-a172-4cbd-9937-7793cb6d3e05"],
+        "passed": true
+      },
+      {
+        "round": 24,
+        "from": "2042-01-01T00:28:00.000Z",
+        "to": "2042-01-01T00:29:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 11,
+          "company": "B",
+          "instance": 1,
+          "reservationId": "abb5efc1-4406-49a0-b918-49f5d89d355d"
+        },
+        "errors": [],
+        "databaseIds": ["abb5efc1-4406-49a0-b918-49f5d89d355d"],
+        "passed": true
+      },
+      {
+        "round": 25,
+        "from": "2042-01-01T00:29:00.000Z",
+        "to": "2042-01-01T00:30:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 5,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "b7ee65e4-d195-4a58-8508-07cf83ea2187"
+        },
+        "errors": [],
+        "databaseIds": ["b7ee65e4-d195-4a58-8508-07cf83ea2187"],
+        "passed": true
+      },
+      {
+        "round": 26,
+        "from": "2042-01-01T00:30:00.000Z",
+        "to": "2042-01-01T00:31:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "cd3bb35f-f726-4ee1-ba09-144e003b8520"
+        },
+        "errors": [],
+        "databaseIds": ["cd3bb35f-f726-4ee1-ba09-144e003b8520"],
+        "passed": true
+      },
+      {
+        "round": 27,
+        "from": "2042-01-01T00:31:00.000Z",
+        "to": "2042-01-01T00:32:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "c62d0c9c-d6e3-4e09-bf1b-d386216bdd93"
+        },
+        "errors": [],
+        "databaseIds": ["c62d0c9c-d6e3-4e09-bf1b-d386216bdd93"],
+        "passed": true
+      },
+      {
+        "round": 28,
+        "from": "2042-01-01T00:32:00.000Z",
+        "to": "2042-01-01T00:33:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 1,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "f176b0e4-9ee2-4631-bea4-9db0d4ba74d0"
+        },
+        "errors": [],
+        "databaseIds": ["f176b0e4-9ee2-4631-bea4-9db0d4ba74d0"],
+        "passed": true
+      },
+      {
+        "round": 29,
+        "from": "2042-01-01T00:33:00.000Z",
+        "to": "2042-01-01T00:34:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 5,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "34f94ea0-fda6-4e60-8c45-4e439aa293c5"
+        },
+        "errors": [],
+        "databaseIds": ["34f94ea0-fda6-4e60-8c45-4e439aa293c5"],
+        "passed": true
+      },
+      {
+        "round": 30,
+        "from": "2042-01-01T00:34:00.000Z",
+        "to": "2042-01-01T00:35:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 15,
+          "company": "B",
+          "instance": 1,
+          "reservationId": "9afa71e1-ad9d-4d82-9e0b-9c26205ede3c"
+        },
+        "errors": [],
+        "databaseIds": ["9afa71e1-ad9d-4d82-9e0b-9c26205ede3c"],
+        "passed": true
+      },
+      {
+        "round": 31,
+        "from": "2042-01-01T00:35:00.000Z",
+        "to": "2042-01-01T00:36:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 8,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "e630ab69-b7c5-44bb-9cd0-1bd86afede9f"
+        },
+        "errors": [],
+        "databaseIds": ["e630ab69-b7c5-44bb-9cd0-1bd86afede9f"],
+        "passed": true
+      },
+      {
+        "round": 32,
+        "from": "2042-01-01T00:36:00.000Z",
+        "to": "2042-01-01T00:37:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 3,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "47d2e62b-38a4-4da4-8ef4-614852531367"
+        },
+        "errors": [],
+        "databaseIds": ["47d2e62b-38a4-4da4-8ef4-614852531367"],
+        "passed": true
+      },
+      {
+        "round": 33,
+        "from": "2042-01-01T00:37:00.000Z",
+        "to": "2042-01-01T00:38:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "2118e386-b4ef-4bfc-8e59-e4321087cdc2"
+        },
+        "errors": [],
+        "databaseIds": ["2118e386-b4ef-4bfc-8e59-e4321087cdc2"],
+        "passed": true
+      },
+      {
+        "round": 34,
+        "from": "2042-01-01T00:38:00.000Z",
+        "to": "2042-01-01T00:39:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 6,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "e23a4f59-dccf-4856-ad06-557ddb708f06"
+        },
+        "errors": [],
+        "databaseIds": ["e23a4f59-dccf-4856-ad06-557ddb708f06"],
+        "passed": true
+      },
+      {
+        "round": 35,
+        "from": "2042-01-01T00:39:00.000Z",
+        "to": "2042-01-01T00:40:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 3,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "221eadbc-523d-49d0-a816-b2fb0a4b8ee4"
+        },
+        "errors": [],
+        "databaseIds": ["221eadbc-523d-49d0-a816-b2fb0a4b8ee4"],
+        "passed": true
+      },
+      {
+        "round": 36,
+        "from": "2042-01-01T00:40:00.000Z",
+        "to": "2042-01-01T00:41:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 13,
+          "company": "B",
+          "instance": 1,
+          "reservationId": "8218212f-fd17-45f9-9319-5cbbecd3dc31"
+        },
+        "errors": [],
+        "databaseIds": ["8218212f-fd17-45f9-9319-5cbbecd3dc31"],
+        "passed": true
+      },
+      {
+        "round": 37,
+        "from": "2042-01-01T00:41:00.000Z",
+        "to": "2042-01-01T00:42:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 1,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "b812b943-840c-4e0b-b75c-971757bc8ac2"
+        },
+        "errors": [],
+        "databaseIds": ["b812b943-840c-4e0b-b75c-971757bc8ac2"],
+        "passed": true
+      },
+      {
+        "round": 38,
+        "from": "2042-01-01T00:42:00.000Z",
+        "to": "2042-01-01T00:43:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "efb60339-8347-4d49-8616-093077989d67"
+        },
+        "errors": [],
+        "databaseIds": ["efb60339-8347-4d49-8616-093077989d67"],
+        "passed": true
+      },
+      {
+        "round": 39,
+        "from": "2042-01-01T00:43:00.000Z",
+        "to": "2042-01-01T00:44:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "bdf5ba6e-b38a-4eeb-9d48-5a785ba23b03"
+        },
+        "errors": [],
+        "databaseIds": ["bdf5ba6e-b38a-4eeb-9d48-5a785ba23b03"],
+        "passed": true
+      },
+      {
+        "round": 40,
+        "from": "2042-01-01T00:44:00.000Z",
+        "to": "2042-01-01T00:45:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 14,
+          "company": "B",
+          "instance": 2,
+          "reservationId": "8bf3532f-37ed-45f9-ac09-f5240c9bad23"
+        },
+        "errors": [],
+        "databaseIds": ["8bf3532f-37ed-45f9-ac09-f5240c9bad23"],
+        "passed": true
+      },
+      {
+        "round": 41,
+        "from": "2042-01-01T00:45:00.000Z",
+        "to": "2042-01-01T00:46:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "6c581eec-f2e8-499b-aa57-f29b2024a8fc"
+        },
+        "errors": [],
+        "databaseIds": ["6c581eec-f2e8-499b-aa57-f29b2024a8fc"],
+        "passed": true
+      },
+      {
+        "round": 42,
+        "from": "2042-01-01T00:46:00.000Z",
+        "to": "2042-01-01T00:47:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 6,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "52f920b5-6def-4595-8191-5be32cf848dc"
+        },
+        "errors": [],
+        "databaseIds": ["52f920b5-6def-4595-8191-5be32cf848dc"],
+        "passed": true
+      },
+      {
+        "round": 43,
+        "from": "2042-01-01T00:47:00.000Z",
+        "to": "2042-01-01T00:48:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 11,
+          "company": "B",
+          "instance": 1,
+          "reservationId": "503e899c-58a8-4a5a-8566-d8346e9805c7"
+        },
+        "errors": [],
+        "databaseIds": ["503e899c-58a8-4a5a-8566-d8346e9805c7"],
+        "passed": true
+      },
+      {
+        "round": 44,
+        "from": "2042-01-01T00:48:00.000Z",
+        "to": "2042-01-01T00:49:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "4d1e7788-e82a-4d3d-9481-080ce8f47410"
+        },
+        "errors": [],
+        "databaseIds": ["4d1e7788-e82a-4d3d-9481-080ce8f47410"],
+        "passed": true
+      },
+      {
+        "round": 45,
+        "from": "2042-01-01T00:49:00.000Z",
+        "to": "2042-01-01T00:50:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 10,
+          "company": "B",
+          "instance": 2,
+          "reservationId": "75dfd4cc-af27-47dc-ac2c-fdbac0c9e9e9"
+        },
+        "errors": [],
+        "databaseIds": ["75dfd4cc-af27-47dc-ac2c-fdbac0c9e9e9"],
+        "passed": true
+      },
+      {
+        "round": 46,
+        "from": "2042-01-01T00:50:00.000Z",
+        "to": "2042-01-01T00:51:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 10,
+          "company": "B",
+          "instance": 2,
+          "reservationId": "fd3fb37f-877d-4ac2-bdb2-e70c04614b19"
+        },
+        "errors": [],
+        "databaseIds": ["fd3fb37f-877d-4ac2-bdb2-e70c04614b19"],
+        "passed": true
+      },
+      {
+        "round": 47,
+        "from": "2042-01-01T00:51:00.000Z",
+        "to": "2042-01-01T00:52:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 2,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "a1fbb60e-33d5-456a-86fa-2763ea6fa1a1"
+        },
+        "errors": [],
+        "databaseIds": ["a1fbb60e-33d5-456a-86fa-2763ea6fa1a1"],
+        "passed": true
+      },
+      {
+        "round": 48,
+        "from": "2042-01-01T00:52:00.000Z",
+        "to": "2042-01-01T00:53:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 8,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "6bf1e2fb-0934-4062-a917-3ef822b9282b"
+        },
+        "errors": [],
+        "databaseIds": ["6bf1e2fb-0934-4062-a917-3ef822b9282b"],
+        "passed": true
+      },
+      {
+        "round": 49,
+        "from": "2042-01-01T00:53:00.000Z",
+        "to": "2042-01-01T00:54:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 1,
+          "company": "A",
+          "instance": 1,
+          "reservationId": "9a77b2de-e67a-454e-8814-f5b542de84c4"
+        },
+        "errors": [],
+        "databaseIds": ["9a77b2de-e67a-454e-8814-f5b542de84c4"],
+        "passed": true
+      },
+      {
+        "round": 50,
+        "from": "2042-01-01T00:54:00.000Z",
+        "to": "2042-01-01T00:55:00.000Z",
+        "successes": 1,
+        "expectedConflicts": 15,
+        "winner": {
+          "clientNumber": 6,
+          "company": "A",
+          "instance": 2,
+          "reservationId": "57ffd9b4-090f-45b0-a377-bd952333b78d"
+        },
+        "errors": [],
+        "databaseIds": ["57ffd9b4-090f-45b0-a377-bd952333b78d"],
+        "passed": true
+      }
+    ]
+  },
+  "databaseValidationMs": 4.555,
+  "finishedUtc": "2026-11-19T14:25:38.070Z"
+}
