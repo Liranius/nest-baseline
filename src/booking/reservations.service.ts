@@ -9,9 +9,14 @@ import {
   type Reservation,
 } from './lifecycle.js';
 
+import { Notifications } from '../notifications/notifications.js';
+
 @Injectable()
 export class ReservationsService {
-  constructor(private readonly db: DataSource) {}
+  constructor(
+    private readonly db: DataSource,
+    private readonly notifications: Notifications,
+  ) {}
 
   async create(employeeId: string, equipmentId: string, from: string, to: string, key: string) {
     try {
@@ -51,6 +56,7 @@ export class ReservationsService {
           [employeeId, equipmentId, from, to, key],
         );
         await recordEvent(tx, created.id, employeeId, 'created');
+        await this.notifications.enqueue(tx, created.id, 1);
         return created;
       });
     } catch (error) {
@@ -87,6 +93,7 @@ export class ReservationsService {
         throw conflict('HANDOVER_EXISTS', 'A reservation with a handover cannot be cancelled');
       await tx.query("UPDATE reservations SET status='cancelled' WHERE id=$1", [id]);
       await recordEvent(tx, id, employeeId, 'cancelled');
+      await this.notifications.enqueue(tx, id, 2);
     });
   }
 }

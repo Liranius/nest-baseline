@@ -12,6 +12,12 @@
 function New-LocalSecret { [Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(32)) }
 $env:BOOKING_DB_PASSWORD = New-LocalSecret
 $env:JWT_SECRET = New-LocalSecret
+$env:NOTIFICATION_ENCRYPTION_KEY = New-LocalSecret
+$env:NOTIFICATIONS_LOCAL = '1'
+$env:WEBHOOK_URL_A = 'http://127.0.0.1:46101/webhook'
+$env:WEBHOOK_URL_B = 'http://127.0.0.1:46102/webhook'
+$env:WEBHOOK_SECRET_A = 'whsec_' + [Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+$env:WEBHOOK_SECRET_B = 'whsec_' + [Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
 $env:SEED_PASSWORD_A = New-LocalSecret
 $env:SEED_PASSWORD_B = New-LocalSecret
 $env:SEED_PASSWORD_ADMIN = New-LocalSecret
@@ -24,10 +30,13 @@ $env:TEST_DATABASE_URL = "postgresql://booking:$($env:BOOKING_DB_PASSWORD)@127.0
 pnpm run build
 pnpm run db:migrate
 pnpm run db:seed
+pnpm run notifications:configure
 pnpm run start:prod
 ```
 
 首次初始化后即可使用 `pnpm run start:dev`。端口被占用时改用空闲宿主端口后重启相应 Compose 服务并更新连接串。连接串中的特殊字符需要 URL 编码，上面的随机值使用十六进制。普通应用启动只连接数据库，迁移由单独命令执行。
+
+保存两个公司的签名密钥和通知加密密钥供重启使用。服务就绪前需完成两家公司的端点配置。发送端、接收端与故障重放步骤见[异步通知演练](notifications.md)。
 
 ## 使用客户端
 
@@ -51,7 +60,7 @@ node clients/admin.mjs inspect $from $to
 
 ## 办理设备领用与归还
 
-在现有阶段 1 数据库上，先停止旧服务，运行 `pnpm run build` 和 `pnpm run db:migrate`，再启动新的实例。已有预约、取消状态和幂等键会保留。旧预约的审计标记为 `from_migration`，显示当前预约状态和升级后发生的事件。
+在现有阶段 1 数据库上，先停止旧服务，运行 `pnpm run build` 、`pnpm run db:migrate` 和 `pnpm run notifications:configure`，再启动新的实例。已有预约、取消状态和幂等键会保留。旧预约的审计标记为 `from_migration`，显示当前预约状态和升级后发生的事件。
 
 以下示例使用当前时刻附近的空闲设备。管理员按预约 ID 办理，两次操作各返回一张凭据，包含借还记录 ID、经办人 ID 和 UTC 时间。相同操作可以向另一实例重试。
 
@@ -78,7 +87,7 @@ node clients/admin.mjs audit $id
 
 ## 运行检查
 
-`pnpm run check` 包括格式、Lint、类型检查、单元测试、HTTP 冒烟、构建及预约、借还及旧库升级的业务集成验收。完整检查只需测试库连接串 `TEST_DATABASE_URL`；测试进程自行生成登录密码和签名密钥。连接串必须指向数据库名以 `_test` 结尾的专用控制库。每个场景在同一 PostgreSQL 服务中新建随机命名的数据库，重复迁移与填充种子、启动两个独立进程，最后停止进程并删除自己创建的数据库。
+`pnpm run check` 包括格式、Lint、类型检查、单元测试、HTTP 冒烟、构建及预约、借还、通知及旧库升级的业务集成验收。完整检查只需测试库连接串 `TEST_DATABASE_URL`；测试进程自行生成登录密码和签名密钥。连接串必须指向数据库名以 `_test` 结尾的专用控制库。每个场景在同一 PostgreSQL 服务中新建随机命名的数据库，重复迁移与填充种子、启动两个独立进程，最后停止进程并删除自己创建的数据库。
 
 构建后可运行 `pnpm run test:booking` 单独复验。HTTP 客户端的响应状态与结构按 OpenAPI 校验；故障用例使用真实 HTTP 代理在上游提交后丢弃响应。阶段证据见[验收记录](booking-acceptance.md)。
 

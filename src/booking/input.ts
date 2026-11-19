@@ -21,7 +21,7 @@ export function uuid(value: unknown): string {
   return value.toLowerCase();
 }
 
-function instant(value: unknown): string {
+export function instant(value: unknown): string {
   if (
     typeof value !== 'string' ||
     !/^\d{4}-\d\d-\d\dT(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,3})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/.test(

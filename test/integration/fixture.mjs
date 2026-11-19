@@ -12,10 +12,15 @@ const exec = promisify(execFile);
 const root = resolve(import.meta.dirname, '../..');
 const randomSecret = () => randomBytes(32).toString('hex');
 
-async function startApi(env) {
-  const child = spawn(process.execPath, ['dist/main.js'], {
+export async function startProcess(
+  env,
+  args = ['dist/main.js'],
+  prefix = 'Booking API ready:',
+  onLine = () => {},
+) {
+  const child = spawn(process.execPath, args, {
     cwd: root,
-    env: { ...env, PORT: '0' },
+    env: { ...env, PORT: env.PORT ?? '0' },
     stdio: ['ignore', 'pipe', 'pipe'],
     windowsHide: true,
   });
@@ -32,9 +37,10 @@ async function startApi(env) {
       child.once('error', reject);
       child.once('exit', (code) => reject(new Error('API exited ' + code + '. ' + diagnostic)));
       lines.on('line', (line) => {
-        if (line.startsWith('Booking API ready: ')) {
-          const url = new URL(line.slice('Booking API ready: '.length));
-          accept('http://127.0.0.1:' + url.port);
+        onLine(line);
+        if (line.startsWith(prefix)) {
+          const value = line.slice(prefix.length).trim();
+          accept(value ? 'http://127.0.0.1:' + new URL(value).port : undefined);
         }
       });
     });
@@ -51,8 +57,7 @@ async function startApi(env) {
     throw error;
   } finally {
     clearTimeout(timer);
-    lines.close();
-    child.stdout.resume();
+    // readline continues draining output and closes when the child exits.
   }
 }
 
@@ -73,7 +78,14 @@ export async function withFixture(run, preparePreviousVersion) {
     endpoint.pathname = '/' + name;
     const env = {
       ...process.env,
+      PORT: '0',
       DATABASE_URL: endpoint.href,
+      NOTIFICATION_ENCRYPTION_KEY: randomSecret(),
+      NOTIFICATIONS_LOCAL: '1',
+      WEBHOOK_URL_A: 'http://127.0.0.1:46101/webhook',
+      WEBHOOK_URL_B: 'http://127.0.0.1:46102/webhook',
+      WEBHOOK_SECRET_A: 'whsec_' + randomBytes(32).toString('base64'),
+      WEBHOOK_SECRET_B: 'whsec_' + randomBytes(32).toString('base64'),
       JWT_SECRET: randomSecret(),
       SEED_PASSWORD_A: randomSecret(),
       SEED_PASSWORD_B: randomSecret(),
@@ -89,18 +101,27 @@ export async function withFixture(run, preparePreviousVersion) {
     await sql.connect();
     if (preparePreviousVersion)
       await preparePreviousVersion({ url: endpoint.href, sql, dbCommand });
+    const previousCount = preparePreviousVersion
+      ? (await sql.query('SELECT count(*)::int AS n FROM migrations')).rows[0].n
+      : 0;
     assert.match(
       (await dbCommand('migrate')).stdout,
-      preparePreviousVersion ? /applied: 1/ : /applied: 2/,
+      preparePreviousVersion
+        ? new RegExp('applied: ' + (3 - previousCount) + '$', 'm')
+        : /applied: 3/,
     );
     assert.match((await dbCommand('migrate')).stdout, /applied: 0/);
     await dbCommand('seed');
     await dbCommand('seed');
-    apis.push(await startApi(env));
-    apis.push(await startApi(env));
+    await exec(process.execPath, ['dist/notifications/process.js', 'configure'], {
+      cwd: root,
+      env,
+    });
+    apis.push(await startProcess(env));
+    apis.push(await startProcess(env));
     const contract = validateHttpContract();
     try {
-      await run({ urls: apis.map((api) => api.baseUrl), sql, env });
+      await run({ urls: apis.map((api) => api.baseUrl), stopFirstApi: apis[0].stop, sql, env });
     } finally {
       contract.mock.restore();
     }

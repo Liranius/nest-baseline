@@ -14,8 +14,12 @@ import { Account, Equipment } from './database/catalog.entity.js';
 import { databaseOptions } from './database/config.js';
 import { AccessGuard, IdentityController } from './security/identity.js';
 
+import { NotificationsModule } from './notifications/module.js';
+import { NotificationsController } from './notifications/controller.js';
+
 @Module({
   imports: [
+    NotificationsModule.register(false),
     TypeOrmModule.forRootAsync({ useFactory: databaseOptions }),
     TypeOrmModule.forFeature([Account, Equipment]),
     JwtModule.registerAsync({
@@ -43,6 +47,7 @@ import { AccessGuard, IdentityController } from './security/identity.js';
   controllers: [
     AppController,
     IdentityController,
+    NotificationsController,
     EquipmentController,
     ReservationsController,
     HandoversController,
