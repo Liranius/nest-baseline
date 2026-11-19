@@ -1,52 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { once } from 'node:events';
-import { createServer } from 'node:http';
+import { loseSuccessfulResponse } from './lost-response.mjs';
 import { EmployeeClient } from '../../clients/employee.mjs';
 import { AdminClient } from '../../clients/admin.mjs';
 import { withFixture, time } from './fixture.mjs';
-
-async function loseSuccessfulResponse(client, device) {
-  // The proxy receives a committed 201, then closes the downstream socket without forwarding it.
-  let originalReceipt;
-  let forwardingError;
-  const proxy = createServer(async (req, res) => {
-    try {
-      const chunks = [];
-      for await (const chunk of req) chunks.push(chunk);
-      const result = await fetch(new URL(req.url, client.baseUrl), {
-        method: 'POST',
-        headers: {
-          authorization: req.headers.authorization,
-          'content-type': 'application/json',
-          'idempotency-key': req.headers['idempotency-key'],
-        },
-        body: Buffer.concat(chunks),
-      });
-      assert.equal(result.status, 201);
-      originalReceipt = await result.json();
-    } catch (error) {
-      forwardingError = error;
-    } finally {
-      res.destroy();
-    }
-  });
-  proxy.listen(0, '127.0.0.1');
-  await once(proxy, 'listening');
-  try {
-    const downstream = new EmployeeClient('http://127.0.0.1:' + proxy.address().port);
-    downstream.token = client.token;
-    await assert.rejects(
-      downstream.reserve(device, time(14), time(15), 'lost-response'),
-      /fetch failed/,
-    );
-    if (forwardingError) throw forwardingError;
-    assert.ok(originalReceipt.id);
-    return originalReceipt;
-  } finally {
-    await new Promise((resolve) => proxy.close(resolve));
-  }
-}
 
 await test('stage 1: two API processes enforce occupancy, replay and ownership through cancellation and rebooking', async () => {
   await withFixture(async ({ urls, sql, env }) => {
@@ -135,7 +92,11 @@ await test('stage 1: two API processes enforce occupancy, replay and ownership t
     assert.equal(changed.status, 409);
     assert.equal(changed.body.code, 'IDEMPOTENCY_KEY_REUSED');
     assert.equal((await a.reservation(first.body.id)).body.to, time(13));
-    const lostReceipt = await loseSuccessfulResponse(a, device);
+    const lostReceipt = await loseSuccessfulResponse(
+      a,
+      (client) => client.reserve(device, time(14), time(15), 'lost-response'),
+      201,
+    );
     const recovered = await same.reserve(device, time(14), time(15), 'lost-response');
     assert.equal(recovered.status, 201);
     assert.deepEqual(recovered.body, lostReceipt);

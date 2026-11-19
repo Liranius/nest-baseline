@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Equipment Booking API",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Shared lab equipment. Availability is expressed in half-open UTC intervals [from,to). Error bodies use stable machine-readable codes."
   },
   "security": [
@@ -401,6 +401,560 @@
                 }
               }
             }
+          },
+          "409": {
+            "description": "HANDOVER_EXISTS",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["HANDOVER_EXISTS"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reservations/{id}/checkout": {
+      "put": {
+        "operationId": "checkoutEquipment",
+        "description": "Lab administrator only. First checkout requires server time in [from,to). Replaying checkout returns its original receipt, including after return.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HandoverReceipt"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "INVALID_INPUT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["INVALID_INPUT"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["UNAUTHORIZED"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["FORBIDDEN"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["NOT_FOUND"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "RESERVATION_CANCELLED, OUTSIDE_PICKUP_WINDOW, EQUIPMENT_IN_USE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": [
+                            "RESERVATION_CANCELLED",
+                            "OUTSIDE_PICKUP_WINDOW",
+                            "EQUIPMENT_IN_USE"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected transaction failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["statusCode", "message"],
+                  "properties": {
+                    "statusCode": {
+                      "const": 500
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reservations/{id}/return": {
+      "put": {
+        "operationId": "returnEquipment",
+        "description": "Lab administrator only. An active loan can be returned after its due time. Replaying return yields the first receipt. The original booking interval remains reserved.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HandoverReceipt"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "INVALID_INPUT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["INVALID_INPUT"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["UNAUTHORIZED"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["FORBIDDEN"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["NOT_FOUND"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "NOT_CHECKED_OUT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["NOT_CHECKED_OUT"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected transaction failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["statusCode", "message"],
+                  "properties": {
+                    "statusCode": {
+                      "const": 500
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reservations/{id}/handover": {
+      "get": {
+        "operationId": "getHandover",
+        "description": "An employee may see only their own progress. A lab administrator may look up any reservation by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Handover"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "INVALID_INPUT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["INVALID_INPUT"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["UNAUTHORIZED"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["NOT_FOUND"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reservations/{id}/audit": {
+      "get": {
+        "operationId": "getReservationAudit",
+        "description": "Lab administrator only. Events in transaction order. Historical reservations expose known facts and events recorded after upgrade.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationAudit"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "INVALID_INPUT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["INVALID_INPUT"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["UNAUTHORIZED"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["FORBIDDEN"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT_FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "enum": ["NOT_FOUND"]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -575,7 +1129,12 @@
               "FORBIDDEN",
               "NOT_FOUND",
               "SLOT_CONFLICT",
-              "IDEMPOTENCY_KEY_REUSED"
+              "IDEMPOTENCY_KEY_REUSED",
+              "RESERVATION_CANCELLED",
+              "OUTSIDE_PICKUP_WINDOW",
+              "EQUIPMENT_IN_USE",
+              "NOT_CHECKED_OUT",
+              "HANDOVER_EXISTS"
             ]
           },
           "message": {
@@ -583,6 +1142,132 @@
           }
         },
         "required": ["code", "message"],
+        "additionalProperties": false
+      },
+      "HandoverReceipt": {
+        "type": "object",
+        "properties": {
+          "handoverId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "actorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["handoverId", "actorId", "at"],
+        "additionalProperties": false
+      },
+      "Handover": {
+        "type": "object",
+        "properties": {
+          "reservationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "equipmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reservationStatus": {
+            "enum": ["confirmed", "cancelled"]
+          },
+          "state": {
+            "enum": ["pending", "cancelled", "checked_out", "returned"]
+          },
+          "checkout": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HandoverReceipt"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "returned": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HandoverReceipt"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "reservationId",
+          "equipmentId",
+          "reservationStatus",
+          "state",
+          "checkout",
+          "returned"
+        ],
+        "additionalProperties": false
+      },
+      "ReservationEvent": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "enum": ["created", "cancelled", "checked_out", "returned"]
+          },
+          "actorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "from": {
+            "anyOf": [
+              {
+                "enum": ["confirmed", "cancelled", "checked_out", "returned"]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "to": {
+            "enum": ["confirmed", "cancelled", "checked_out", "returned"]
+          }
+        },
+        "required": ["action", "actorId", "at", "from", "to"],
+        "additionalProperties": false
+      },
+      "ReservationAudit": {
+        "type": "object",
+        "properties": {
+          "reservationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "equipmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reservationStatus": {
+            "enum": ["confirmed", "cancelled"]
+          },
+          "coverage": {
+            "enum": ["complete", "from_migration"],
+            "description": "from_migration means pre-upgrade changes have no recorded event."
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReservationEvent"
+            }
+          }
+        },
+        "required": ["reservationId", "equipmentId", "reservationStatus", "coverage", "events"],
         "additionalProperties": false
       }
     }

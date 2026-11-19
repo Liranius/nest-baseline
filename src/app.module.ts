@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { EquipmentController } from './booking/equipment.controller.js';
+import { HandoversController } from './booking/handovers.controller.js';
+import { HandoversService } from './booking/handovers.service.js';
 import { ReservationsController } from './booking/reservations.controller.js';
 import { ReservationsService } from './booking/reservations.service.js';
 import { ApiErrorFilter } from './booking/api-error.filter.js';
@@ -38,11 +40,18 @@ import { AccessGuard, IdentityController } from './security/identity.js';
       },
     }),
   ],
-  controllers: [AppController, IdentityController, EquipmentController, ReservationsController],
+  controllers: [
+    AppController,
+    IdentityController,
+    EquipmentController,
+    ReservationsController,
+    HandoversController,
+  ],
   providers: [
     AppService,
     AccessGuard,
     ReservationsService,
+    HandoversService,
     { provide: APP_FILTER, useClass: ApiErrorFilter },
   ],
 })
