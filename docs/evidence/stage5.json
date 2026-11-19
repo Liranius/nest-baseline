@@ -1,0 +1,222 @@
+{
+  "startedUtc": "2026-11-19T13:23:51.438+00:00",
+  "revision": "01e2712c7f5e8e3b91c4c23197bb7c9121732374",
+  "backup": {
+    "snapshotId": "00000034-00000002-1",
+    "snapshotUtc": "2026-11-19T13:24:38.317180+00:00",
+    "imageId": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e",
+    "postgres": "18.7 (Debian 18.7-1.pgdg13+2)",
+    "tables": {
+      "nest_outbox.dead_letters": {
+        "rows": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "nest_outbox.inbox": {
+        "rows": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "nest_outbox.messages": {
+        "rows": 2,
+        "sha256": "5eacd626db6ff41ae736eb71b4d3e4aaa7750da6a141c2135ebceea0f5c9884b"
+      },
+      "nest_outbox.migrations": {
+        "rows": 1,
+        "sha256": "fcdef502bd39fa07bd493cf2201bf08c0f9b5f5f9a9d83652772a3e566a89f6f"
+      },
+      "nest_webhooks.deliveries": {
+        "rows": 5,
+        "sha256": "1132b1b64959259f97f814833980bfb8f078c6e4f1e1dbdf61b06532b02a8cf7"
+      },
+      "nest_webhooks.delivery_attempts": {
+        "rows": 10,
+        "sha256": "a36817008e8a01437d67c8fe5967b47a8b53ab1183f7900cf3ac2dc6658b8397"
+      },
+      "nest_webhooks.endpoints": {
+        "rows": 2,
+        "sha256": "e999d80f9b4d7022e85458a5cb14acb41b47eba6ed6ca151aad6eb8bca44759f"
+      },
+      "nest_webhooks.messages": {
+        "rows": 5,
+        "sha256": "615aeb917cb155b1f04ca1a8c1c55da1a7ed5921f64d9c360c2fed819f1d4ffc"
+      },
+      "nest_webhooks.migrations": {
+        "rows": 1,
+        "sha256": "fcdef502bd39fa07bd493cf2201bf08c0f9b5f5f9a9d83652772a3e566a89f6f"
+      },
+      "public.accounts": {
+        "rows": 3,
+        "sha256": "b62aa9185934ca6e02f99fafe53692a7e87ad58f6ded7db551767ed4f0606da8"
+      },
+      "public.equipment": {
+        "rows": 2,
+        "sha256": "23d3d14e51e018e282995ea3620308a71e0d922a9f44274122d5a5014044b819"
+      },
+      "public.handovers": {
+        "rows": 2,
+        "sha256": "79858b703577844c40aedbcb01badb6251db0e922307517f412cab4baeee89e3"
+      },
+      "public.migrations": {
+        "rows": 4,
+        "sha256": "fbdbb7632e2b5ec9598ecd8cd0c39ba50335cd0539a6fd078664462cab8fd1e5"
+      },
+      "public.notification_events": {
+        "rows": 7,
+        "sha256": "adc155a597a08e9a65320e0d4838e8fcffe4e4a05d5ad2570d2bfed99279eb00"
+      },
+      "public.notification_replays": {
+        "rows": 1,
+        "sha256": "8f785291c7e5ab3ff05365f4f0e946fd6eceb3defbe61561548851e9afdf8fee"
+      },
+      "public.organizations": {
+        "rows": 2,
+        "sha256": "12d29ae643f45037f5c03ab26c7dc16c1bb72b1207eaafe1b973996d47fd214f"
+      },
+      "public.reservation_events": {
+        "rows": 10,
+        "sha256": "162cb14311f2ccf6782cb8c01c10c96f15bfb11b5fa34a6426a8b9778e7cfe17"
+      },
+      "public.reservations": {
+        "rows": 6,
+        "sha256": "b9a7adde5556808d3d1981d4f0c914b7ddf520c1b76aca0428d4eaf8381c8dfa"
+      }
+    },
+    "reservationIds": [
+      "00009fa3-1d5e-4c3d-ad6c-4e82e965e56a",
+      "4beb81b1-5112-4723-aa84-024e6ab7a4bc",
+      "8d749516-944d-4853-be52-d55ecbe581c2",
+      "a0d20292-b385-4eb5-9cef-33ffdc40cb84",
+      "a78a8cd3-aa9a-4a2f-b873-67c5d7acf19d",
+      "c5a99571-7e69-4903-9460-a970d92d826b"
+    ],
+    "sha256": "57a3494af691fa43bad37ca31dadb394387e558f7fe442f1891617e125b38c7a",
+    "bytes": 45007,
+    "completedUtc": "2026-11-19T13:24:40.664+00:00"
+  },
+  "matchedTables": 18,
+  "pendingMigrations": 0,
+  "sampleReservations": {
+    "confirmed": "a78a8cd3-aa9a-4a2f-b873-67c5d7acf19d",
+    "cancelled": "c5a99571-7e69-4903-9460-a970d92d826b",
+    "checkedOut": "8d749516-944d-4853-be52-d55ecbe581c2",
+    "returned": "4beb81b1-5112-4723-aa84-024e6ab7a4bc"
+  },
+  "faultUtc": "2026-11-19T13:24:41.967+00:00",
+  "clusterIds": {
+    "source": "7709872757179113515",
+    "external": "7709872740752920619",
+    "restored": "7709872999720570923"
+  },
+  "excludedReservationIds": ["20c2a76e-6210-4c60-8f29-f2583b15a718"],
+  "lastExcludedWrite": {
+    "key": "after-snapshot",
+    "reservationId": "20c2a76e-6210-4c60-8f29-f2583b15a718",
+    "sourceHttp": 201,
+    "createdUtc": "2026-11-19T13:24:41.844Z",
+    "restoredHttp": 404
+  },
+  "snapshotToFaultSeconds": 3.65,
+  "failures": [
+    {
+      "reason": "ARCHIVE_CHECKSUM_MISMATCH",
+      "publicHttp": 503,
+      "runningWorkers": 0,
+      "outboundHttpRequests": 0,
+      "newReceiverEffects": 0
+    },
+    {
+      "reason": "RECOVERY_KEY_MISMATCH",
+      "publicHttp": 503,
+      "runningWorkers": 0,
+      "outboundHttpRequests": 0,
+      "newReceiverEffects": 0
+    }
+  ],
+  "business": {
+    "idempotentReplay": {
+      "fromSlot": "a",
+      "toSlot": "b",
+      "reservationId": "a78a8cd3-aa9a-4a2f-b873-67c5d7acf19d"
+    },
+    "location": "North lab / desk 5",
+    "crossTenantHttp": 404,
+    "overlap": "SLOT_CONFLICT",
+    "verifiedReservationStates": {
+      "confirmed": "pending",
+      "cancelled": "cancelled",
+      "checkedOut": "checked_out",
+      "returned": "returned"
+    },
+    "confirmedPeriod": {
+      "equipmentId": "30000000-0000-4000-8000-000000000001",
+      "from": "2042-03-02T00:00:00.000+00:00",
+      "to": "2042-03-02T01:00:00.000+00:00"
+    },
+    "returnReceipt": {
+      "handoverId": "09d8b51a-747a-4ff8-acea-8b548c3e1b94",
+      "at": "2026-11-19T13:25:05.148Z",
+      "actorId": "10000000-0000-4000-8000-000000000003"
+    },
+    "addedReturnAuditRows": 1,
+    "newReservation": "61fec1ea-a0db-4617-88c5-558346c6364e",
+    "historicalDelivery": {
+      "id": "dlv_01a1f3faa5137245a545cd846569e65c",
+      "attempts": 6,
+      "replays": [
+        {
+          "at": "2026-11-19T13:24:33.69416+00:00",
+          "actorId": "10000000-0000-4000-8000-000000000003"
+        }
+      ]
+    }
+  },
+  "deliveries": {
+    "A": {
+      "beforeFaultSuccessfulHttp": 1,
+      "restoredSuccessfulHttp": 1,
+      "eventId": "9fa16b40-b9ac-48eb-9744-2fd696c15ec8",
+      "reservationId": "a78a8cd3-aa9a-4a2f-b873-67c5d7acf19d",
+      "before": {
+        "inboxRows": 1,
+        "projection": {
+          "status": "confirmed",
+          "version": 1,
+          "tuple": "761"
+        }
+      },
+      "after": {
+        "inboxRows": 1,
+        "projection": {
+          "status": "confirmed",
+          "version": 1,
+          "tuple": "761"
+        }
+      },
+      "restoredHttp": 204,
+      "otherCompanyRows": 0
+    },
+    "B": {
+      "beforeFaultSuccessfulHttp": 0,
+      "restoredSuccessfulHttp": 1,
+      "eventId": "c273978f-7271-4458-9b2a-615981f45f85",
+      "reservationId": "a0d20292-b385-4eb5-9cef-33ffdc40cb84",
+      "before": {
+        "inboxRows": 0,
+        "projection": null
+      },
+      "after": {
+        "inboxRows": 1,
+        "projection": {
+          "status": "confirmed",
+          "version": 1,
+          "tuple": "773"
+        }
+      },
+      "restoredHttp": 204,
+      "otherCompanyRows": 0
+    }
+  },
+  "sourceAHttp": 204,
+  "completedUtc": "2026-11-19T13:25:05.764+00:00",
+  "recoverySeconds": 23.797,
+  "targetSeconds": 300
+}

@@ -6,6 +6,8 @@
 
 业务测试使用 PostgreSQL、两个独立 API 进程、通知 worker 和两个公司的 HTTP 接收端。管理员可为尚未领用的有效预约登记领用地点。阶段 4 在同一个 HAProxy 入口持续接单，演练两个 API 和 worker 的升级、回滚与再发布。[部署操作](docs/stage4-deployment.md) · [验收记录](docs/booking-acceptance.md)
 
+阶段 5 从在线备份恢复到新的 PostgreSQL 实例，并在原入口核对预约、归还和公司的实际收件结果。[备份与恢复演练](docs/stage5-recovery.md)
+
 ## 项目初始化
 
 安装 fnm 并在当前 shell 中启用它。使用 PowerShell 时，可在当前会话运行下面的命令，也可以把它加入 PowerShell 配置文件。[fnm 安装说明](https://github.com/Schniz/fnm#installation)
