@@ -4,6 +4,7 @@ import {
   Controller,
   createParamDecorator,
   ExecutionContext,
+  ForbiddenException,
   Get,
   HttpCode,
   Injectable,
@@ -20,6 +21,11 @@ import { invalidInput, objectInput } from '../booking/input.js';
 import { matchesPassword } from './password.js';
 
 export type Identity = Pick<Account, 'id' | 'login' | 'role' | 'organizationId'>;
+export function requireAdmin(user: Identity) {
+  if (user.role !== 'admin')
+    throw new ForbiddenException({ code: 'FORBIDDEN', message: 'Lab administrator required' });
+}
+
 interface AuthRequest extends Request {
   principal: Identity;
 }

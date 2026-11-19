@@ -33,8 +33,8 @@ export class EquipmentController {
       WITH requested AS (SELECT tstzrange($2::timestamptz,$3::timestamptz,'[)') AS span)
       SELECT lower(free) AS "from", upper(free) AS "to" FROM requested w
       CROSS JOIN LATERAL unnest(tstzmultirange(w.span) - COALESCE((
-        SELECT range_agg(tstzrange(starts_at, ends_at,'[)')) FROM reservations
-        WHERE equipment_id=$1 AND status='confirmed' AND tstzrange(starts_at, ends_at,'[)') && w.span
+        SELECT range_agg(span) FROM equipment_occupied_slots
+        WHERE equipment_id=$1 AND span && w.span
       ), '{}'::tstzmultirange)) AS free ORDER BY lower(free)`,
       [id, from, to],
     );

@@ -1,12 +1,7 @@
-import { Controller, ForbiddenException, Get, Param, Put, UseGuards } from '@nestjs/common';
-import { AccessGuard, CurrentUser, type Identity } from '../security/identity.js';
+import { Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
+import { AccessGuard, CurrentUser, requireAdmin, type Identity } from '../security/identity.js';
 import { uuid } from './input.js';
 import { HandoversService } from './handovers.service.js';
-
-function requireAdmin(user: Identity) {
-  if (user.role !== 'admin')
-    throw new ForbiddenException({ code: 'FORBIDDEN', message: 'Lab administrator required' });
-}
 
 @Controller('v1/reservations/:id')
 @UseGuards(AccessGuard)

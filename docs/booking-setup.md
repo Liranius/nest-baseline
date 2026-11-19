@@ -96,3 +96,28 @@ node clients/admin.mjs audit $id
 ```powershell
 wsl -d Ubuntu -- docker compose --profile dev --profile test down
 ```
+
+## 设备维护窗口
+
+管理员使用现有登录凭据和管理端客户端。把下面的设备 ID、窗口 ID 换为设备目录和排期响应中的值。
+
+```powershell
+node clients/admin.mjs maintenance-schedule DEVICE_ID 2042-03-01T10:00:00Z 2042-03-01T11:00:00Z
+node clients/admin.mjs maintenance-list DEVICE_ID 2042-03-01T09:00:00Z 2042-03-01T12:00:00Z
+node clients/admin.mjs maintenance-cancel WINDOW_ID
+```
+
+列表返回与查询范围相交的原始时段、状态、创建与撤销的经办人和时间，按开始时间排序。`scheduled` 表示已排期且尚未撤销。撤销即时释放时段，重复撤销保留首次记录。改期时先撤销原窗口，再创建新窗口；若期间被其他预约占用，新的排期请求返回 `409 SLOT_CONFLICT`。设备目录和员工空闲查询仍使用原契约。迁移后两台新版实例都就绪，再启用管理端排期，确保两个实例都能从空闲列表扣除维护。
+
+## 热门设备固定负载
+
+按本页「准备数据库」设置指向专用 `*_test` 库的 `TEST_DATABASE_URL`。分别执行以下命令，等待上一条完成后再执行下一条；两条命令都要重新生成 `dist`。
+
+```sh
+pnpm run check
+pnpm run drill:contention --output .tmp/contention.json
+```
+
+脚本在新建的临时库中运行两个编译后的 API 进程。16 个员工 HTTP 客户端使用两家公司各一个账号，每个账号向每个实例分配 4 个客户端。每轮由同一信号放行，抢同一台设备的同一个一分钟窗口，各请求的幂等键均不同。5 轮预热后计量 50 轮，每轮使用新的空闲时段。结束时关闭进程并回收临时库。
+
+JSON 记录客户端发出预约到读完整个响应的延迟，分位数采用最近秩次法。吞吐量以正式请求数除以正式轮次的总经过时间；登录、预热和事后的逐轮 SQL 核对另行计时。成功与预期的时段冲突分别统计。可按报告中的轮次、胜者、API 实例和库内预约 ID 核对结果；验收失败会保留 JSON 并以非零状态退出。性能数字用于同环境复测。
