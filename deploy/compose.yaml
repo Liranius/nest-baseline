@@ -1,0 +1,82 @@
+x-api-env: &api-env
+  DATABASE_URL: ${DATABASE_URL}
+  JWT_SECRET: ${JWT_SECRET}
+  NOTIFICATION_ENCRYPTION_KEY: ${NOTIFICATION_ENCRYPTION_KEY}
+  NOTIFICATIONS_LOCAL: '1'
+services:
+  db:
+    image: postgres:18@sha256:e754b839f447639b7004895f4d8a4bfcb4e9dbe3a1bc035f27f646562a16fd61
+    environment:
+      POSTGRES_USER: booking
+      POSTGRES_DB: staging
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes: [data:/var/lib/postgresql]
+    healthcheck:
+      test: [CMD, pg_isready, -U, booking, -d, staging]
+      interval: 1s
+      timeout: 2s
+      retries: 30
+  proxy:
+    image: haproxy:3.2-alpine@sha256:bb2466c8ee98fe8cab9f4db6c8984d0741bd0f560bada697ff0d3c1add31b535
+    user: '${RUN_UID}:${RUN_GID}'
+    ports: ['127.0.0.1::8080']
+    volumes: ['./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro', '${CONTROL_DIR}:/control']
+  slot-a:
+    image: ${A_IMAGE}
+    environment:
+      <<: *api-env
+      DATABASE_URL: ${A_DATABASE_URL}
+    ports: ['127.0.0.1::3000']
+    stop_grace_period: 15s
+  slot-b:
+    image: ${B_IMAGE}
+    environment:
+      <<: *api-env
+      DATABASE_URL: ${B_DATABASE_URL}
+    ports: ['127.0.0.1::3000']
+    stop_grace_period: 15s
+  worker:
+    image: ${WORKER_IMAGE}
+    network_mode: service:proxy
+    command: [node, dist/notifications/process.js, worker]
+    environment: *api-env
+    stop_grace_period: 15s
+  receiver-a:
+    image: ${OLD_IMAGE}
+    network_mode: service:proxy
+    command: [node, dist/notifications/receiver.js]
+    environment:
+      RECEIVER_COMPANY: A
+      RECEIVER_DATABASE_URL: ${DATABASE_URL}
+      RECEIVER_SECRET: ${WEBHOOK_SECRET_A}
+      PORT: '46101'
+  receiver-b:
+    image: ${OLD_IMAGE}
+    network_mode: service:proxy
+    command: [node, dist/notifications/receiver.js]
+    environment:
+      RECEIVER_COMPANY: B
+      RECEIVER_DATABASE_URL: ${DATABASE_URL}
+      RECEIVER_SECRET: ${WEBHOOK_SECRET_B}
+      PORT: '46102'
+  job:
+    profiles: [jobs]
+    image: ${JOB_IMAGE}
+    environment:
+      <<: *api-env
+      SEED_PASSWORD_A: ${SEED_PASSWORD_A}
+      SEED_PASSWORD_B: ${SEED_PASSWORD_B}
+      SEED_PASSWORD_ADMIN: ${SEED_PASSWORD_ADMIN}
+      WEBHOOK_URL_A: http://127.0.0.1:46101/webhook
+      WEBHOOK_URL_B: http://127.0.0.1:46102/webhook
+      WEBHOOK_SECRET_A: ${WEBHOOK_SECRET_A}
+      WEBHOOK_SECRET_B: ${WEBHOOK_SECRET_B}
+  traffic:
+    profiles: [drill]
+    image: ${CLIENT_IMAGE}
+    command: [node, /app/traffic.mjs]
+    volumes: ['./traffic.mjs:/app/traffic.mjs:ro']
+    environment:
+      SEED_PASSWORD_A: ${SEED_PASSWORD_A}
+volumes:
+  data: {}

@@ -1,0 +1,258 @@
+{
+  "project": "booking-drill-05ca87f46b",
+  "started": "2026-11-19T12:48:41.885276+00:00",
+  "oldRevision": "82bafe6a8c67eac7095f56c660eb17dff13776b2",
+  "newRevision": "01e2712c7f5e8e3b91c4c23197bb7c9121732374",
+  "oldImage": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb",
+  "newImage": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e",
+  "baseImages": {
+    "slot-a": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb",
+    "slot-b": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb",
+    "worker": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb"
+  },
+  "postgres": "18.7 (Debian 18.7-1.pgdg13+2)",
+  "compose": "2.35.1",
+  "clientImage": "sha256:cc5d85923dfdec925bbb697a243291e02e349b9d3c72b12a9065ee0013436b45",
+  "historicalNotification": {
+    "reservationId": "bb3c13b9-6adf-45d0-8fea-dbdbb0efbbf1",
+    "eventId": "e15be020-dba7-47ae-8a0a-f5c6c937dfdd",
+    "deliveryId": "dlv_01a1f3da26b872f4a058d1ec0605c457",
+    "attempts": 6,
+    "replays": [
+      {
+        "at": "2026-11-19T12:48:56.277307+00:00",
+        "actorId": "10000000-0000-4000-8000-000000000003"
+      }
+    ]
+  },
+  "migrationFailure": {
+    "lockTimeoutMs": 350,
+    "jobSeconds": 1.944,
+    "columnCount": 0,
+    "migrationRows": 0
+  },
+  "migrationApplied": {
+    "first": 1,
+    "repeat": 0
+  },
+  "failedAdmission": {
+    "slot": "a",
+    "directReadiness": 503,
+    "newUserSessions": 0,
+    "servingPeer": "b"
+  },
+  "drain": {
+    "slot": "b",
+    "id": "34e9132c-88a5-46df-9f25-c80938732d17",
+    "http": 201,
+    "databaseRows": 1,
+    "newSessionsOnDrainingSlot": 0,
+    "newPeerSessions": 5,
+    "oldContainer": "b254b9494418282fb6fb32aa5a49ab8c0f71b3a48bb589fc2601e77d0eb0d6bd",
+    "exitCode": 0,
+    "stopSeconds": 1.26,
+    "graceSeconds": 15
+  },
+  "mixedImages": {
+    "slot-a": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb",
+    "slot-b": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e",
+    "worker": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb"
+  },
+  "upgradeDelivery": {
+    "reservationId": "8015c534-c01c-4780-8348-fe4ba5198f2c",
+    "eventId": "c6cf08cb-87b6-45c0-86e5-25b99a84c762",
+    "before": "queued",
+    "after": "succeeded",
+    "receiverRows": 1,
+    "attempts": 1,
+    "workerImage": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e"
+  },
+  "upgradedImages": {
+    "slot-a": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e",
+    "slot-b": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e",
+    "worker": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e"
+  },
+  "rollbackSeconds": 7.326,
+  "rollbackDelivery": {
+    "reservationId": "f910bb96-dd53-4c69-b6e6-930274329800",
+    "eventId": "3d9d07a0-ee21-4d1f-91b3-3862a6d60e14",
+    "before": "queued",
+    "after": "succeeded",
+    "receiverRows": 1,
+    "attempts": 1,
+    "workerImage": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb"
+  },
+  "rollbackImages": {
+    "slot-a": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb",
+    "slot-b": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb",
+    "worker": "sha256:8b47077258dbcd113c527332d93ea0a03bea6d1b868bc6dc8918b079028db2fb"
+  },
+  "redeployedImages": {
+    "slot-a": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e",
+    "slot-b": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e",
+    "worker": "sha256:45b968cae7ea879abfa7046c4f28ca3abaa41539597e3036a3ab2146aabdcc6e"
+  },
+  "data": {
+    "historicalReservation": "a4ebec13-91d9-4784-be32-7059907dbe34",
+    "historicalLocation": null,
+    "upgradedReservation": "8b993798-fa20-481c-aaf2-953726cf6d97",
+    "writtenLocation": "North lab / desk 4",
+    "afterRedeploy": "North lab / desk 4",
+    "otherEmployeeStatus": 404,
+    "cancelledByOldRelease": "bcf1f576-4d4f-403e-8008-9a152f990962",
+    "historyUnchanged": true
+  },
+  "traffic": {
+    "baseline": {
+      "startUtc": "2026-11-19T12:48:59.111000+00:00",
+      "seconds": 2.452,
+      "requests": 10,
+      "rps": 4.08,
+      "bySlot": {
+        "b": 5,
+        "a": 5
+      },
+      "http": {
+        "201": 4,
+        "200": 2,
+        "409": 2,
+        "204": 2
+      }
+    },
+    "migration": {
+      "startUtc": "2026-11-19T12:49:01.563000+00:00",
+      "seconds": 2.967,
+      "requests": 13,
+      "rps": 4.38,
+      "bySlot": {
+        "a": 7,
+        "b": 6
+      },
+      "http": {
+        "201": 6,
+        "200": 3,
+        "409": 2,
+        "204": 2
+      }
+    },
+    "candidate-rejected": {
+      "startUtc": "2026-11-19T12:49:04.530000+00:00",
+      "seconds": 21.688,
+      "requests": 95,
+      "rps": 4.38,
+      "bySlot": {
+        "b": 95
+      },
+      "http": {
+        "409": 19,
+        "204": 19,
+        "201": 38,
+        "200": 19
+      }
+    },
+    "drain": {
+      "startUtc": "2026-11-19T12:49:26.218000+00:00",
+      "seconds": 8.065,
+      "requests": 35,
+      "rps": 4.34,
+      "bySlot": {
+        "a": 33,
+        "b": 2
+      },
+      "http": {
+        "409": 7,
+        "204": 7,
+        "201": 14,
+        "200": 7
+      }
+    },
+    "mixed": {
+      "startUtc": "2026-11-19T12:49:34.283000+00:00",
+      "seconds": 61.057,
+      "requests": 265,
+      "rps": 4.34,
+      "bySlot": {
+        "a": 133,
+        "b": 132
+      },
+      "http": {
+        "409": 53,
+        "204": 53,
+        "201": 106,
+        "200": 53
+      }
+    },
+    "upgrade": {
+      "startUtc": "2026-11-19T12:50:35.340000+00:00",
+      "seconds": 6.909,
+      "requests": 30,
+      "rps": 4.34,
+      "bySlot": {
+        "b": 22,
+        "a": 8
+      },
+      "http": {
+        "409": 6,
+        "204": 6,
+        "201": 12,
+        "200": 6
+      }
+    },
+    "rollback": {
+      "startUtc": "2026-11-19T12:50:42.249000+00:00",
+      "seconds": 8.332,
+      "requests": 37,
+      "rps": 4.44,
+      "bySlot": {
+        "a": 19,
+        "b": 18
+      },
+      "http": {
+        "409": 8,
+        "204": 8,
+        "201": 14,
+        "200": 7
+      }
+    },
+    "on-previous": {
+      "startUtc": "2026-11-19T12:50:50.581000+00:00",
+      "seconds": 0.155,
+      "requests": 0,
+      "rps": 0.0,
+      "bySlot": {},
+      "http": {}
+    },
+    "redeploy": {
+      "startUtc": "2026-11-19T12:50:50.736000+00:00",
+      "seconds": 68.948,
+      "requests": 301,
+      "rps": 4.37,
+      "bySlot": {
+        "b": 150,
+        "a": 151
+      },
+      "http": {
+        "201": 121,
+        "200": 60,
+        "409": 60,
+        "204": 60
+      }
+    }
+  },
+  "legacyClient": {
+    "requests": 786,
+    "actions": {
+      "create": 158,
+      "replay": 157,
+      "read": 157,
+      "conflict": 157,
+      "cancel": 157
+    },
+    "expectedConflicts": 157,
+    "unexpectedErrors": 0,
+    "maxStartGapMs": 302,
+    "maxResponseMs": 301
+  },
+  "trafficTraceSha256": "13bce8e5e7decdcb069f7528d159b798082e4c1a04753430450144d26aa18420",
+  "completed": "2026-11-19T12:52:01.178948+00:00"
+}
