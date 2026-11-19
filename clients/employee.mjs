@@ -32,6 +32,9 @@ if (import.meta.main) {
     case 'reserve':
       printResult(await client.reserve(...args));
       break;
+    case 'handover':
+      printResult(await client.handover(...args));
+      break;
     case 'get':
       printResult(await client.reservation(...args));
       break;
@@ -40,7 +43,7 @@ if (import.meta.main) {
       break;
     default:
       throw new Error(
-        'Expected me, list, availability ID FROM TO, reserve ID FROM TO KEY, get ID, or cancel ID',
+        'Expected me, list, availability ID FROM TO, reserve ID FROM TO KEY, get ID, handover ID, or cancel ID',
       );
   }
 }

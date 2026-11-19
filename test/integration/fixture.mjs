@@ -57,7 +57,7 @@ async function startApi(env) {
 }
 
 // Each invocation creates and owns a new database; never migrate or clear the supplied database.
-export async function withFixture(run) {
+export async function withFixture(run, preparePreviousVersion) {
   if (!process.env.TEST_DATABASE_URL) throw new Error('TEST_DATABASE_URL is required; see README');
   const endpoint = new URL(process.env.TEST_DATABASE_URL);
   if (!endpoint.pathname.endsWith('_test')) throw new Error('Use a dedicated *_test database');
@@ -85,12 +85,17 @@ export async function withFixture(run) {
         env,
         timeout: 30000,
       });
-    assert.match((await dbCommand('migrate')).stdout, /applied: 1/);
+    sql = new Client({ connectionString: endpoint.href });
+    await sql.connect();
+    if (preparePreviousVersion)
+      await preparePreviousVersion({ url: endpoint.href, sql, dbCommand });
+    assert.match(
+      (await dbCommand('migrate')).stdout,
+      preparePreviousVersion ? /applied: 1/ : /applied: 2/,
+    );
     assert.match((await dbCommand('migrate')).stdout, /applied: 0/);
     await dbCommand('seed');
     await dbCommand('seed');
-    sql = new Client({ connectionString: endpoint.href });
-    await sql.connect();
     apis.push(await startApi(env));
     apis.push(await startApi(env));
     const contract = validateHttpContract();

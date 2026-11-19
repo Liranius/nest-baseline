@@ -1,15 +1,13 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { DataSource, QueryFailedError } from 'typeorm';
-
-const notFound = () => new NotFoundException({ code: 'NOT_FOUND', message: 'Resource not found' });
-export interface Reservation {
-  id: string;
-  equipmentId: string;
-  from: Date;
-  to: Date;
-  status: 'confirmed' | 'cancelled';
-}
-const fields = 'id, equipment_id AS "equipmentId", starts_at AS "from", ends_at AS "to", status';
+import {
+  conflict,
+  lockReservation,
+  notFound,
+  recordEvent,
+  reservationFields,
+  type Reservation,
+} from './lifecycle.js';
 
 @Injectable()
 export class ReservationsService {
@@ -23,7 +21,9 @@ export class ReservationsService {
           employeeId + ':' + key,
         ]);
         const [existing] = await tx.query<Reservation[]>(
-          'SELECT ' + fields + ' FROM reservations WHERE employee_id=$1 AND idempotency_key=$2',
+          'SELECT ' +
+            reservationFields +
+            ' FROM reservations WHERE employee_id=$1 AND idempotency_key=$2',
           [employeeId, key],
         );
         if (existing) {
@@ -50,6 +50,7 @@ export class ReservationsService {
           VALUES ($1,$2,$3,$4,$5) RETURNING id`,
           [employeeId, equipmentId, from, to, key],
         );
+        await recordEvent(tx, created.id, employeeId, 'created');
         return created;
       });
     } catch (error) {
@@ -67,7 +68,7 @@ export class ReservationsService {
 
   async read(employeeId: string, id: string) {
     const [reservation] = await this.db.query<Reservation[]>(
-      'SELECT ' + fields + ' FROM reservations WHERE employee_id=$1 AND id=$2',
+      'SELECT ' + reservationFields + ' FROM reservations WHERE employee_id=$1 AND id=$2',
       [employeeId, id],
     );
     if (!reservation) throw notFound();
@@ -75,12 +76,17 @@ export class ReservationsService {
   }
 
   async cancel(employeeId: string, id: string) {
-    const result = await this.db
-      .createQueryBuilder()
-      .update('reservations')
-      .set({ status: 'cancelled' })
-      .where('employee_id=:employeeId AND id=:id', { employeeId, id })
-      .execute();
-    if (!result.affected) throw notFound();
+    await this.db.transaction(async (tx) => {
+      const booking = await lockReservation(tx, id, employeeId);
+      if (booking.status === 'cancelled') return;
+      const loan = await tx.query<{ id: string }[]>(
+        'SELECT id FROM handovers WHERE reservation_id=$1',
+        [id],
+      );
+      if (loan.length)
+        throw conflict('HANDOVER_EXISTS', 'A reservation with a handover cannot be cancelled');
+      await tx.query("UPDATE reservations SET status='cancelled' WHERE id=$1", [id]);
+      await recordEvent(tx, id, employeeId, 'cancelled');
+    });
   }
 }

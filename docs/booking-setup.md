@@ -49,9 +49,36 @@ node clients/admin.mjs inspect $from $to
 
 预约创建请求的身份来自 Bearer 令牌。时间包含时区，可精确到毫秒。取消后使用新键重新预约；旧键重放仍得到原预约 ID，查询原 ID 可见已取消状态。
 
+## 办理设备领用与归还
+
+在现有阶段 1 数据库上，先停止旧服务，运行 `pnpm run build` 和 `pnpm run db:migrate`，再启动新的实例。已有预约、取消状态和幂等键会保留。旧预约的审计标记为 `from_migration`，显示当前预约状态和升级后发生的事件。
+
+以下示例使用当前时刻附近的空闲设备。管理员按预约 ID 办理，两次操作各返回一张凭据，包含借还记录 ID、经办人 ID 和 UTC 时间。相同操作可以向另一实例重试。
+
+```powershell
+$equipment = '30000000-0000-4000-8000-000000000001'
+$now = [DateTimeOffset]::UtcNow
+$from = $now.AddMinutes(-1).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+$to = $now.AddMinutes(30).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+$env:BOOKING_LOGIN = 'employee-a'
+$env:BOOKING_PASSWORD = $env:SEED_PASSWORD_A
+$booking = node clients/employee.mjs reserve $equipment $from $to ([Guid]::NewGuid().ToString()) | ConvertFrom-Json
+if ($booking.status -ne 201) { throw $booking.body.code }
+$id = $booking.body.id
+node clients/employee.mjs handover $id
+$env:BOOKING_LOGIN = 'lab-admin'
+$env:BOOKING_PASSWORD = $env:SEED_PASSWORD_ADMIN
+node clients/admin.mjs checkout $id
+node clients/admin.mjs handover $id
+node clients/admin.mjs return $id
+node clients/admin.mjs audit $id
+```
+
+首次领用以数据库时间落在预约的左闭右开时段内为准。逾期仍可归还。下一笔预约领用时若遇到 `409 EQUIPMENT_IN_USE`，待上一笔归还后可在本人预约时段内重试。提前归还后，原时段仍在预约日历中保留到结束时间。领用过的预约再次取消会返回 `409 HANDOVER_EXISTS`。
+
 ## 运行检查
 
-`pnpm run check` 包括格式、Lint、类型检查、单元测试、HTTP 冒烟、构建及两阶段业务集成验收。完整检查只需测试库连接串 `TEST_DATABASE_URL`；测试进程自行生成登录密码和签名密钥。连接串必须指向数据库名以 `_test` 结尾的专用控制库。每个场景在同一 PostgreSQL 服务中新建随机命名的数据库，重复迁移与填充种子、启动两个独立进程，最后停止进程并删除自己创建的数据库。
+`pnpm run check` 包括格式、Lint、类型检查、单元测试、HTTP 冒烟、构建及预约、借还及旧库升级的业务集成验收。完整检查只需测试库连接串 `TEST_DATABASE_URL`；测试进程自行生成登录密码和签名密钥。连接串必须指向数据库名以 `_test` 结尾的专用控制库。每个场景在同一 PostgreSQL 服务中新建随机命名的数据库，重复迁移与填充种子、启动两个独立进程，最后停止进程并删除自己创建的数据库。
 
 构建后可运行 `pnpm run test:booking` 单独复验。HTTP 客户端的响应状态与结构按 OpenAPI 校验；故障用例使用真实 HTTP 代理在上游提交后丢弃响应。阶段证据见[验收记录](booking-acceptance.md)。
 

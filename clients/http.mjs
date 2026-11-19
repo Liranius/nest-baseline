@@ -26,6 +26,9 @@ export class BookingClient {
     if (result.status === 200) this.token = result.body.accessToken;
     return result;
   }
+  handover(id) {
+    return this.request('/reservations/' + id + '/handover');
+  }
   me() {
     return this.request('/me');
   }
