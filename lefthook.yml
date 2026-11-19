@@ -6,7 +6,7 @@ pre-commit:
   jobs:
     - name: oxlint
       glob:
-        - '{src,test,scripts}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}'
+        - '{src,test,scripts,clients}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}'
         - 'vitest.config{,.e2e}.ts'
       run: pnpm exec oxlint --fix --no-error-on-unmatched-pattern -- {staged_files}
       stage_fixed: true
