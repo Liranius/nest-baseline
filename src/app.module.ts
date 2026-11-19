@@ -17,6 +17,9 @@ import { AccessGuard, IdentityController } from './security/identity.js';
 import { NotificationsModule } from './notifications/module.js';
 import { NotificationsController } from './notifications/controller.js';
 
+import { PickupLocationController } from './booking/pickup-location.controller.js';
+import { ReadinessController } from './readiness.controller.js';
+
 @Module({
   imports: [
     NotificationsModule.register(false),
@@ -48,6 +51,8 @@ import { NotificationsController } from './notifications/controller.js';
     AppController,
     IdentityController,
     NotificationsController,
+    PickupLocationController,
+    ReadinessController,
     EquipmentController,
     ReservationsController,
     HandoversController,

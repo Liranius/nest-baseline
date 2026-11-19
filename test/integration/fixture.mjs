@@ -107,8 +107,8 @@ export async function withFixture(run, preparePreviousVersion) {
     assert.match(
       (await dbCommand('migrate')).stdout,
       preparePreviousVersion
-        ? new RegExp('applied: ' + (3 - previousCount) + '$', 'm')
-        : /applied: 3/,
+        ? new RegExp('applied: ' + (4 - previousCount) + '$', 'm')
+        : /applied: 4/,
     );
     assert.match((await dbCommand('migrate')).stdout, /applied: 0/);
     await dbCommand('seed');
