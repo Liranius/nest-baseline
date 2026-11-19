@@ -51,7 +51,7 @@ settings:
       - extractive
       - deliberate
       - summarized
-permalink: nest-baseline/schemas/coding-session
+permalink: equipment-booking-api/schemas/coding-session
 ---
 
 <!--
@@ -85,3 +85,5 @@ Each new checkpoint can link to its verified predecessor with
 `continues [[Previous checkpoint title]]`. New writers use the shared fields.
 Legacy agent-specific session fields remain accepted for existing notes; do not
 rewrite old checkpoints or infer missing session IDs.
+
+2026-11-19: adapted the project permalink for equipment-booking-api.

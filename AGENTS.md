@@ -4,7 +4,7 @@
 
 在仓库根目录执行命令。Node 版本见 [.node-version](.node-version)，pnpm 版本和项目命令见 [package.json](package.json)。安装步骤见 [README](README.md#项目初始化)。
 
-服务从 [src/main.ts](src/main.ts) 启动，模块在 [src/app.module.ts](src/app.module.ts) 装配。服务单元测试与源码相邻，HTTP 端到端测试和知识脚本测试位于 [test/](test/)。
+服务从 [src/main.ts](src/main.ts) 启动，模块在 [src/app.module.ts](src/app.module.ts) 装配。服务单元测试与源码相邻，业务契约与启动步骤见[本地运行与验收](docs/booking-setup.md)。HTTP 端到端测试、双实例业务验收和知识脚本测试位于 [test/](test/)。
 
 查阅或修订项目决策时使用[项目知识维护技能](.agents/skills/project-knowledge/SKILL.md)。开始工作时记下当前提交，以便交付前核对来源变更。初始化与检索命令见[项目知识](README.md#项目知识)。
 
@@ -16,7 +16,7 @@
 
 ## 验证要求
 
-交付前运行 `pnpm run check`，该命令只读检查源码。使用 `pnpm run format` 写入格式修复后，复核实际差异。[质量检查](README.md#质量检查)
+交付前准备专用 PostgreSQL 测试库并设置 `TEST_DATABASE_URL`，运行 `pnpm run check`，该命令只读检查源码。使用 `pnpm run format` 写入格式修复后，复核实际差异。[质量检查](README.md#质量检查)
 
 - 文档改动核对命令、路径和链接，并用 `git diff --check` 检查差异。
 - 改变接口行为时，用测试覆盖受影响的请求和响应。修复缺陷时验证原问题和相关回归。影响启动或构建产物时，从生产入口验证就绪、响应和停止。[生产构建冒烟验证](README.md#生产构建冒烟验证)

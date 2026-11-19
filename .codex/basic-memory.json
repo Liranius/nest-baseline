@@ -1,6 +1,6 @@
 {
   "basicMemory": {
-    "primaryProject": "nest-baseline",
+    "primaryProject": "equipment-booking-api",
     "secondaryProjects": [],
     "teamProjects": {},
     "projectMode": "local",
@@ -12,6 +12,6 @@
     "checkpointOnCompact": true,
     "captureEvents": true,
     "placementConventions": "Put decisions in codex/decisions/ and checkpoints in codex/checkpoints/.",
-    "repository": "Liranius/nest-baseline"
+    "repository": "equipment-booking-api"
   }
 }

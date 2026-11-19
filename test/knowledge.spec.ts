@@ -43,7 +43,7 @@ function git(cwd: string, args: string[]) {
 }
 
 function fixture() {
-  const directory = realpathSync(mkdtempSync(join(tmpdir(), 'nest-memory-')));
+  const directory = realpathSync(mkdtempSync(join(tmpdir(), 'equipment-booking-memory-')));
   owned.push(directory);
   const root = join(directory, 'project with spaces');
   mkdirSync(join(root, 'scripts'), { recursive: true });
@@ -53,7 +53,7 @@ function fixture() {
   cpSync(source, join(root, 'scripts/knowledge.mjs'));
   writeFileSync(
     join(root, '.codex/basic-memory.json'),
-    JSON.stringify({ basicMemory: { primaryProject: 'nest-baseline' } }),
+    JSON.stringify({ basicMemory: { primaryProject: 'equipment-booking-api' } }),
   );
   git(root, ['init', '--initial-branch=main']);
   git(root, ['config', 'core.hooksPath', join(directory, 'empty-hooks')]);
@@ -64,7 +64,7 @@ function fixture() {
 function run(root: string, cache: string, cwd = root, args = ['bind'], input?: string) {
   return spawnSync(process.execPath, [join(root, 'scripts/knowledge.mjs'), ...args], {
     cwd,
-    env: { ...fixtureEnv, NEST_BASELINE_MEMORY_CACHE: cache },
+    env: { ...fixtureEnv, EQUIPMENT_BOOKING_MEMORY_CACHE: cache },
     encoding: 'utf8',
     input,
   });
@@ -86,7 +86,7 @@ afterEach(() => {
     const absolute = resolve(directory);
     const temporaryRoot = realpathSync(tmpdir());
     if (
-      !absolute.startsWith(`${temporaryRoot}${sep}nest-memory-`) ||
+      !absolute.startsWith(`${temporaryRoot}${sep}equipment-booking-memory-`) ||
       realpathSync(absolute) !== absolute
     ) {
       throw new Error('Refusing to remove a directory outside the owned test fixture.');
@@ -118,7 +118,7 @@ describe('repo knowledge binding', () => {
     const config = JSON.parse(readFileSync(join(second.settings, 'config.json'), 'utf8')) as {
       projects: Record<string, { path: string }>;
     };
-    expect(config.projects['nest-baseline']?.path).toBe(second.notes);
+    expect(config.projects['equipment-booking-api']?.path).toBe(second.notes);
   });
 
   it('rejects a copied configuration pointing at another directory without overwriting it', () => {
@@ -128,8 +128,8 @@ describe('repo knowledge binding', () => {
     mkdirSync(foreign);
     const path = join(current.settings, 'config.json');
     const changed = JSON.stringify({
-      projects: { 'nest-baseline': { path: foreign, mode: 'local' } },
-      default_project: 'nest-baseline',
+      projects: { 'equipment-booking-api': { path: foreign, mode: 'local' } },
+      default_project: 'equipment-booking-api',
     });
     writeFileSync(path, changed);
     const result = run(root, cache);

@@ -1,8 +1,8 @@
-# nest-baseline
+# equipment-booking-api
 
 ## 项目简介
 
-`nest-baseline` 是一个单包 NestJS HTTP 服务。应用代码与服务单元测试位于 `src/`，HTTP 端到端测试和知识脚本测试位于 `test/`。
+共享实验室设备预约 API，从 nest-baseline 的 a2cd2af 派生。阶段 0–1 支持员工和管理员登录、共享设备空闲查询、员工预约、幂等重试和取消。业务测试使用 PostgreSQL 与两个独立 API 进程。
 
 ## 项目初始化
 
@@ -32,26 +32,11 @@ pnpm run hooks:install
 
 ## 运行 HTTP 服务
 
-在仓库根目录运行 `pnpm run start` 启动本地服务。开发时可运行 `pnpm run start:dev`，文件变更后会重新构建并重启。示例接口可以直接运行，无需数据库或凭据。在服务所在的终端按 Ctrl+C 停止服务。
-
-服务进程未设置 `PORT` 时监听 `3000`。显式设置时，值只能包含十进制数字，范围为 `0` 到 `65535`。设为 `0` 时由操作系统分配空闲端口。空字符串、带空白的值、超出范围的数字或其他非法值会使服务在监听前报错并以非零状态退出。
+按[本地运行与验收](docs/booking-setup.md)准备开发数据库、迁移、种子和签名密钥，再运行 `pnpm run start:dev` 或编译后启动。服务未设置 `PORT` 时监听 3000，支持 0 至 65535 的十进制端口；0 由系统分配，非法值使启动失败。公开接口见 [OpenAPI 契约](docs/openapi.json)。
 
 ### 生产构建冒烟验证
 
-运行 `pnpm run build`。构建成功后，选用空闲端口启动编译后的 `dist/main.js`。下面的 PowerShell 示例使用端口 3100。
-
-```powershell
-$env:PORT = '3100'
-pnpm run start:prod
-```
-
-在第二个 PowerShell 终端请求同一端口的根接口。
-
-```powershell
-Invoke-WebRequest -Uri http://127.0.0.1:3100/ -TimeoutSec 2 | Select-Object StatusCode, Content
-```
-
-当 `GET /` 返回 HTTP `200` 且正文精确匹配 `Hello World!` 时，服务就绪。如果连接失败，可在启动后的 10 秒内重试。如果启动时报 `EADDRINUSE`，在两个终端改用同一空闲端口，重新启动并请求接口。验证结束后，无论成功还是失败，都在服务终端按 Ctrl+C，再确认端口已释放，可供下次启动使用。
+完成数据库初始化后运行 `pnpm run build`、`pnpm run start:prod`，等待日志输出实际监听地址。访问 `GET /` 应返回 200 和 `Hello World!`。使用员工客户端登录并列出设备可核对数据库连接、认证与业务路由。使用 Ctrl+C 停止服务，确认端口释放。
 
 ## 运行测试
 
@@ -70,15 +55,15 @@ pnpm run test:cov
 
 ## 质量检查
 
-在仓库根目录执行 `pnpm run check`。它依次运行 `format:check`、`lint`、`typecheck`、`test`、`test:e2e` 和 `build`，遇到第一项失败即停止。每一步也可以通过 `pnpm run <脚本名>` 单独运行。
+按[本地运行与验收](docs/booking-setup.md)提供测试数据库后，在仓库根目录执行 `pnpm run check`。它依次运行 `format:check`、`lint`、`typecheck`、`test`、`test:e2e`、`build` 和 `test:booking`，遇到第一项失败即停止。每一步也可以通过 `pnpm run <脚本名>` 单独运行。
 
-Oxfmt 检查仓库中支持的文件，包括 Markdown 和 JSON，跳过锁文件、依赖目录、生成产物和原样保留的第三方技能。Lint 覆盖应用、测试、项目脚本和根目录的两份 Vitest 配置。TypeScript 对包括测试在内的根项目执行类型检查，不生成文件。
+Oxfmt 检查仓库中支持的文件，包括 Markdown 和 JSON，跳过锁文件、依赖目录、生成产物和原样保留的第三方技能。Lint 覆盖应用、测试、项目脚本、HTTP 客户端和根目录的两份 Vitest 配置。TypeScript 对包括测试在内的根项目执行类型检查，不生成文件。
 
 质量检查保持源码原样。Vitest 可能在 `node_modules/` 下写入缓存，生产构建会生成 `dist/` 和 `tsconfig.build.tsbuildinfo`。需要写入格式化结果时，运行 `pnpm run format`。
 
 ### GitHub 合并检查
 
-面向 `main` 的 PR 和推送到 `main` 的提交都会触发 CI。工作流从 `.node-version` 和 `package.json` 读取工具版本，在干净的 Ubuntu 环境中运行 `pnpm install --frozen-lockfile` 和 `pnpm run check`。检查失败时，在该次运行的 `Checks` 日志中查看首个失败步骤。[CI 工作流](.github/workflows/ci.yml)
+面向 `main` 的 PR 和推送到 `main` 的提交都会触发 CI。工作流从 `.node-version` 和 `package.json` 读取工具版本，在干净的 Ubuntu 环境中运行 `pnpm install --frozen-lockfile` 和 `pnpm run check`；测试由本工作流的独立 PostgreSQL 18 服务支持。检查失败时，在该次运行的 `Checks` 日志中查看首个失败步骤。[CI 工作流](.github/workflows/ci.yml)
 
 配置 `main` 分支保护时，将 GitHub Actions 在 PR 上报告的 `Quality` 设为必需检查，并要求分支与 `main` 同步后再合并。在仓库设置中只启用 **Rebase and merge**。只有环境准备、依赖安装和项目检查均实际执行成功，`Quality` 才会通过。`main` 推送的汇总结果单独命名为 `CI result`。
 
@@ -88,7 +73,7 @@ Oxfmt 检查仓库中支持的文件，包括 Markdown 和 JSON，跳过锁文�
 
 升级依赖的主版本时，单独提交 PR，说明升级理由、破坏性变更和适配范围。同步受影响的版本声明、锁文件、CI 配置、文档及例外记录，并在 PR 中记录 `pnpm run check` 和受影响行为（包括失败路径）的验证结果。
 
-仓库维护者收到 Dependabot 告警后，核查依赖在服务、构建或 CI 中的实际用途。对 critical 和 high 告警，在下一个工作日结束前完成初次影响判断。其他告警在下次基线发布前复核。[漏洞告警](https://github.com/Liranius/nest-baseline/security/dependabot)
+仓库维护者收到 Dependabot 告警后，核查依赖在服务、构建或 CI 中的实际用途。对 critical 和 high 告警，在下一个工作日结束前完成初次影响判断。其他告警在下次基线发布前复核。
 
 若 PR 引入或扩大了已确认可触达的 high 或 critical 风险，维护者在修复、移除依赖或记录有效缓解措施后再合并。在告警或相关 PR 中记录责任人、决定和依据；暂缓项另记复查日期。在到期、发布基线、修复版本可用或依赖用途变化时复查。合并时由维护者执行这项审查，GitHub 的自动必需检查为 `Quality`。
 
@@ -109,7 +94,7 @@ Git 忽略私有的 `.env`、`.env.local` 以及各环境的本地覆盖文件�
 
 ### 提交前检查
 
-在项目的 Node 和 pnpm 环境中提交。安装钩子后，`git commit` 会先用 Oxlint 修复暂存的 `src/`、`test/`、`scripts/` 文件和根目录两份 Vitest 配置，再用 Oxfmt 格式化它支持的暂存文件。两步顺序执行，修复结果自动重新暂存。遇到无法修复的错误时提交会停止，可用 `git diff --cached` 复核暂存结果，用 `git diff` 查看保留的未暂存改动。[Lefthook 配置](lefthook.yml)
+在项目的 Node 和 pnpm 环境中提交。安装钩子后，`git commit` 会先用 Oxlint 修复暂存的 `src/`、`test/`、`scripts/`、`clients/` 文件和根目录两份 Vitest 配置，再用 Oxfmt 格式化它支持的暂存文件。两步顺序执行，修复结果自动重新暂存。遇到无法修复的错误时提交会停止，可用 `git diff --cached` 复核暂存结果，用 `git diff` 查看保留的未暂存改动。[Lefthook 配置](lefthook.yml)
 
 同一文件部分暂存时，Lefthook 会临时隐藏未暂存的修改。若恢复这些修改时与自动修复冲突，提交会中止。核对两份差异，手工整理冲突行，再用 `git add -p` 选择本次要提交的内容。
 

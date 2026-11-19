@@ -1,7 +1,7 @@
 {
-  "name": "nest-baseline",
+  "name": "equipment-booking-api",
   "version": "0.0.1",
-  "description": "",
+  "description": "Shared laboratory equipment reservations API",
   "author": "",
   "private": true,
   "license": "MIT",
@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "nest build",
-    "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:e2e && pnpm run build",
+    "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run test:e2e && pnpm run build && pnpm run test:booking",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "hooks:install": "lefthook install",
@@ -33,20 +33,27 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "oxlint --type-aware src/ test/ scripts/ vitest.config.ts vitest.config.e2e.ts",
+    "lint": "oxlint --type-aware src/ test/ scripts/ clients/ vitest.config.ts vitest.config.e2e.ts",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental false",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
-    "test:e2e": "vitest run --config ./vitest.config.e2e.ts"
+    "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
+    "db:migrate": "node dist/database/command.js migrate",
+    "db:seed": "node dist/database/command.js seed",
+    "test:booking": "node --test --test-concurrency=1 \"test/integration/*.test.mjs\""
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",
     "@nestjs/core": "^12.0.1",
+    "@nestjs/jwt": "^12.0.5",
     "@nestjs/platform-express": "^12.0.1",
+    "@nestjs/typeorm": "^12.0.3",
+    "pg": "^8.23.1",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "~0.3.31"
   },
   "devDependencies": {
     "@nestjs/cli": "^12.0.0",
@@ -54,8 +61,11 @@
     "@nestjs/testing": "^12.0.1",
     "@types/express": "^5.0.0",
     "@types/node": "^24.0.0",
+    "@types/pg": "^8.23.1",
     "@types/supertest": "^7.0.0",
     "@vitest/coverage-v8": "^4.1.2",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "js-yaml": "4.3.2",
     "lefthook": "2.1.14",
     "oxfmt": "^0.78.0",

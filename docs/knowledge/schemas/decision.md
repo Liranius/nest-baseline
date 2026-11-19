@@ -21,7 +21,7 @@ settings:
       - rejected
     decided?: string, when the decision was made (ISO timestamp)
     project?: string, the Basic Memory project this decision belongs to
-permalink: nest-baseline/schemas/decision
+permalink: equipment-booking-api/schemas/decision
 ---
 
 <!--
@@ -55,3 +55,5 @@ Decisions are found by structured recall:
 `type: decision` plus `status` make decisions queryable. Capture decisions
 sparingly — one note per genuine decision, not per opinion. Validation is `warn`,
 never blocking.
+
+2026-11-19: adapted the project permalink for equipment-booking-api.
