@@ -5,6 +5,8 @@ import { EquipmentHandover1795000000000 } from './handover.migration.js';
 
 import { BookingNotifications1795100000000 } from './notifications.migration.js';
 
+import { PickupLocation1795200000000 } from './pickup-location.migration.js';
+
 export function databaseOptions(): DataSourceOptions {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error('DATABASE_URL is required');
@@ -18,6 +20,7 @@ export function databaseOptions(): DataSourceOptions {
       BookingSchema1780000000000,
       EquipmentHandover1795000000000,
       BookingNotifications1795100000000,
+      PickupLocation1795200000000,
     ],
   };
 }
