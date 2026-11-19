@@ -4,7 +4,7 @@
 
 共享实验室设备预约 API，从 nest-baseline 的 a2cd2af 派生。员工可查询共享设备、预约、取消和查看本人交接进度。管理员按预约办理领用、归还并查阅审计记录。预约确认和取消还会异步通知所属公司，支持按预约排查和重放。[通知演练](docs/notifications.md)
 
-业务测试使用 PostgreSQL、两个独立 API 进程、通知 worker 和两个公司的 HTTP 接收端。
+业务测试使用 PostgreSQL、两个独立 API 进程、通知 worker 和两个公司的 HTTP 接收端。管理员可为尚未领用的有效预约登记领用地点。阶段 4 在同一个 HAProxy 入口持续接单，演练两个 API 和 worker 的升级、回滚与再发布。[部署操作](docs/stage4-deployment.md) · [验收记录](docs/booking-acceptance.md)
 
 ## 项目初始化
 
