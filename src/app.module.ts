@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { MaintenanceController } from './booking/maintenance.controller.js';
 import { EquipmentController } from './booking/equipment.controller.js';
 import { HandoversController } from './booking/handovers.controller.js';
 import { HandoversService } from './booking/handovers.service.js';
@@ -54,6 +55,7 @@ import { ReadinessController } from './readiness.controller.js';
     PickupLocationController,
     ReadinessController,
     EquipmentController,
+    MaintenanceController,
     ReservationsController,
     HandoversController,
   ],

@@ -1,5 +1,5 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import type { EntityManager } from 'typeorm';
+import { QueryFailedError, type EntityManager } from 'typeorm';
 
 export interface Reservation {
   id: string;
@@ -14,6 +14,19 @@ export const reservationFields =
 export const notFound = () =>
   new NotFoundException({ code: 'NOT_FOUND', message: 'Resource not found' });
 export const conflict = (code: string, message: string) => new ConflictException({ code, message });
+
+export function rethrowSlotConflict(error: unknown): never {
+  if (error instanceof QueryFailedError) {
+    const cause = error.driverError as { code?: string; constraint?: string };
+    if (
+      cause.code === '23P01' &&
+      (cause.constraint === 'equipment_slot_exclusion' ||
+        cause.constraint === 'maintenance_slot_exclusion')
+    )
+      throw conflict('SLOT_CONFLICT', 'Equipment is unavailable for this time');
+  }
+  throw error;
+}
 
 const transitions = {
   created: [null, 'confirmed'],

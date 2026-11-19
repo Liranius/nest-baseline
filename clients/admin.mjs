@@ -1,5 +1,19 @@
 import { BookingClient, loginFromEnv, printResult } from './http.mjs';
 export class AdminClient extends BookingClient {
+  scheduleMaintenance(id, from, to) {
+    return this.request('/equipment/' + id + '/maintenance-windows', {
+      method: 'POST',
+      body: { from, to },
+    });
+  }
+  maintenanceWindows(id, from, to) {
+    return this.request(
+      '/equipment/' + id + '/maintenance-windows?' + new URLSearchParams({ from, to }),
+    );
+  }
+  cancelMaintenance(id) {
+    return this.request('/maintenance-windows/' + id, { method: 'DELETE' });
+  }
   notifications(id) {
     return this.request('/reservations/' + id + '/notifications');
   }
@@ -33,6 +47,10 @@ if (import.meta.main) {
   const [action, ...args] = process.argv.slice(2);
   if (action === 'me') printResult(await client.me());
   else if (action === 'list') printResult(await client.list());
+  else if (action === 'maintenance-schedule')
+    printResult(await client.scheduleMaintenance(...args));
+  else if (action === 'maintenance-list') printResult(await client.maintenanceWindows(...args));
+  else if (action === 'maintenance-cancel') printResult(await client.cancelMaintenance(...args));
   else if (action === 'notifications') printResult(await client.notifications(...args));
   else if (action === 'replay') printResult(await client.replay(...args));
   else if (action === 'checkout') printResult(await client.checkout(...args));
@@ -45,6 +63,6 @@ if (import.meta.main) {
     if (devices.some((device) => device.availability.status >= 400)) process.exitCode = 1;
   } else
     throw new Error(
-      'Expected me, list, inspect FROM TO, handover ID, checkout ID, return ID, audit ID, notifications ID or replay DELIVERY_ID',
+      'Expected me, list, inspect FROM TO, handover ID, checkout ID, return ID, audit ID, notifications ID replay DELIVERY_ID, maintenance-schedule DEVICE FROM TO, maintenance-list DEVICE FROM TO or maintenance-cancel WINDOW',
     );
 }

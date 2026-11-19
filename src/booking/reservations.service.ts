@@ -1,10 +1,11 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { DataSource, QueryFailedError } from 'typeorm';
+import { DataSource } from 'typeorm';
 import {
   conflict,
   lockReservation,
   notFound,
   recordEvent,
+  rethrowSlotConflict,
   reservationFields,
   type Reservation,
 } from './lifecycle.js';
@@ -60,15 +61,7 @@ export class ReservationsService {
         return created;
       });
     } catch (error) {
-      if (error instanceof QueryFailedError) {
-        const cause = error.driverError as { code?: string; constraint?: string };
-        if (cause.code === '23P01' && cause.constraint === 'equipment_slot_exclusion')
-          throw new ConflictException({
-            code: 'SLOT_CONFLICT',
-            message: 'Equipment is already booked for this time',
-          });
-      }
-      throw error;
+      rethrowSlotConflict(error);
     }
   }
 

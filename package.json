@@ -42,6 +42,7 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "db:migrate": "node dist/database/command.js migrate",
     "db:seed": "node dist/database/command.js seed",
+    "drill:contention": "pnpm run build && node scripts/contention-drill.mjs",
     "test:booking": "node --test --test-concurrency=1 \"test/integration/*.test.mjs\"",
     "notifications:configure": "node dist/notifications/process.js configure",
     "notifications:worker": "node dist/notifications/process.js worker",

@@ -26,16 +26,21 @@ for (const [template, methods] of Object.entries(document.paths)) {
   }
 }
 
+export function contractFor(method, path) {
+  const route = routes.find((entry) => entry.method === method && entry.pattern.test(path));
+  assert.ok(route, 'Undocumented request: ' + path);
+  return (status) => {
+    assert.ok(route.responses.has(status), 'Undocumented HTTP status: ' + status);
+    return route.responses.get(status);
+  };
+}
+
 export function validateHttpContract() {
   const original = globalThis.fetch;
   return mock.method(globalThis, 'fetch', async (url, options) => {
-    const route = routes.find(
-      (r) => r.method === (options?.method ?? 'GET') && r.pattern.test(new URL(url).pathname),
-    );
-    assert.ok(route, 'Undocumented request: ' + new URL(url).pathname);
+    const validatorFor = contractFor(options?.method ?? 'GET', new URL(url).pathname);
     const response = await original(url, options);
-    assert.ok(route.responses.has(response.status), 'Undocumented HTTP status: ' + response.status);
-    const validate = route.responses.get(response.status);
+    const validate = validatorFor(response.status);
     const copy = response.clone();
     if (validate) {
       assert.match(copy.headers.get('content-type') ?? '', /application\/json/);

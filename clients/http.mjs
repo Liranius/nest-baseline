@@ -1,10 +1,11 @@
 export class BookingClient {
-  constructor(baseUrl) {
+  constructor(baseUrl, transport) {
     this.baseUrl = baseUrl;
+    this.transport = transport;
   }
 
   async request(path, { method = 'GET', body, headers = {} } = {}) {
-    const response = await fetch(new URL('/v1' + path, this.baseUrl), {
+    const response = await (this.transport ?? fetch)(new URL('/v1' + path, this.baseUrl), {
       method,
       headers: {
         ...(this.token && { authorization: 'Bearer ' + this.token }),

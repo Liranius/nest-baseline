@@ -8,6 +8,8 @@
 
 阶段 5 从在线备份恢复到新的 PostgreSQL 实例，并在原入口核对预约、归还和公司的实际收件结果。[备份与恢复演练](docs/stage5-recovery.md)
 
+管理员可为设备安排、查询和撤销维护窗口。双实例下的热门设备抢订可用固定负载重复测量。[维护排期与固定负载复现](docs/booking-setup.md#设备维护窗口)
+
 ## 项目初始化
 
 安装 fnm 并在当前 shell 中启用它。使用 PowerShell 时，可在当前会话运行下面的命令，也可以把它加入 PowerShell 配置文件。[fnm 安装说明](https://github.com/Schniz/fnm#installation)
