@@ -2,8 +2,8 @@
 title: 从预约快照恢复并按事件核对公司收件
 type: decision
 status: accepted
-project: equipment-booking-api
-permalink: equipment-booking-api/codex/decisions/recover-bookings-and-reconcile-deliveries
+project: nest-baseline
+permalink: nest-baseline/codex/decisions/recover-bookings-and-reconcile-deliveries
 sources:
   - deploy/recovery.compose.yaml
   - deploy/recovery_store.py

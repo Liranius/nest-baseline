@@ -5,5 +5,3 @@
 `.agents/skills/` 中的 `bm-orient`、`bm-decide`、`bm-writing`、`bm-remember`、`bm-checkpoint` 来自 [Basic Memory 官方 Codex 技能](https://github.com/basicmachines-co/basic-memory/tree/1d0e09b6f4876c3f339c30e8dbfcf66e59e2c356/plugins/codex/skills)，按 AGPL-3.0-or-later 提供，各目录附有许可证原文。
 
 `docs/knowledge/schemas/` 中的三个模板派生自同一提交的 [Basic Memory schema](https://github.com/basicmachines-co/basic-memory/tree/1d0e09b6f4876c3f339c30e8dbfcf66e59e2c356/plugins/codex/schemas)。本项目于 2026-11-17 将模板的 permalink 调整为 `nest-baseline`，各文件保留修改记录。[AGPL 许可证](docs/knowledge/schemas/LICENSE)
-
-本参考工程派生自 nest-baseline 的 a2cd2af，保留原始许可证。2026-11-19 将派生模板的项目标识调整为 equipment-booking-api。

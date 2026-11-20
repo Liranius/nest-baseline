@@ -1,4 +1,4 @@
-name: equipment-booking
+name: nest-baseline
 services:
   dev-db:
     image: postgres:18

@@ -20,7 +20,7 @@ schema:
   parent_task?: Task, parent task if this is a subtask
 settings:
   validation: warn
-permalink: equipment-booking-api/schemas/task
+permalink: nest-baseline/schemas/task
 ---
 
 <!--
@@ -51,5 +51,3 @@ Put queryable fields (`status`, `priority`, `current_step`) in frontmatter so
 observations so `schema_validate` sees them. `note_type="Task"` is stored as
 lowercase `task` in frontmatter, so search with `note_types=["task"]`.
 Validation is `warn` — advisory, never blocking.
-
-2026-11-19: adapted the project permalink for equipment-booking-api.

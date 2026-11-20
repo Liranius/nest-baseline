@@ -52,8 +52,7 @@ function context(cwd) {
     throw new Error('Invalid primaryProject in .codex/basic-memory.json.');
   }
   const cache = resolve(
-    process.env.EQUIPMENT_BOOKING_MEMORY_CACHE ??
-      join(homedir(), '.cache/equipment-booking-api-memory'),
+    process.env.NEST_BASELINE_MEMORY_CACHE ?? join(homedir(), '.cache/nest-baseline-memory'),
   );
   const key = createHash('sha256').update(canonical(root)).digest('hex').slice(0, 20);
   const settings = join(cache, 'worktrees', key);
@@ -313,7 +312,7 @@ export async function checkMcp(ctx, { timeoutMs = 90000, shutdownTimeoutMs = 500
     await call('initialize', {
       protocolVersion: '2024-11-05',
       capabilities: {},
-      clientInfo: { name: 'equipment-booking-api-doctor', version: '1' },
+      clientInfo: { name: 'nest-baseline-doctor', version: '1' },
     });
     child.stdin.write(
       `${JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' })}\n`,
