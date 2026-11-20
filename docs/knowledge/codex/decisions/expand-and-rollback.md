@@ -2,8 +2,8 @@
 title: 应用回滚期间保留已扩展的预约数据
 type: decision
 status: accepted
-project: equipment-booking-api
-permalink: equipment-booking-api/codex/decisions/expand-and-rollback
+project: nest-baseline
+permalink: nest-baseline/codex/decisions/expand-and-rollback
 sources:
   - src/database/pickup-location.migration.ts
   - src/booking/pickup-location.controller.ts

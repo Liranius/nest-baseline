@@ -2,8 +2,8 @@
 title: 预约通知按版本更新公司状态
 type: decision
 status: accepted
-project: equipment-booking-api
-permalink: equipment-booking-api/codex/decisions/notification-versions
+project: nest-baseline
+permalink: nest-baseline/codex/decisions/notification-versions
 sources:
   - src/notifications/notifications.ts
   - src/notifications/module.ts

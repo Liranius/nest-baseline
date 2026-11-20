@@ -2,8 +2,8 @@
 title: 分别记录预约时段与实物交接
 type: decision
 status: accepted
-project: equipment-booking-api
-permalink: equipment-booking-api/codex/decisions/physical-handover
+project: nest-baseline
+permalink: nest-baseline/codex/decisions/physical-handover
 sources:
   - src/database/handover.migration.ts
   - src/booking/lifecycle.ts

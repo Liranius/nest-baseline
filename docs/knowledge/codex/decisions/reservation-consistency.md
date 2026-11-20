@@ -2,8 +2,8 @@
 title: 用 PostgreSQL 约束共享设备的时段与预约重试
 type: decision
 status: accepted
-project: equipment-booking-api
-permalink: equipment-booking-api/codex/decisions/reservation-consistency
+project: nest-baseline
+permalink: nest-baseline/codex/decisions/reservation-consistency
 sources:
   - docs/openapi.json
   - src/database/initial.migration.ts

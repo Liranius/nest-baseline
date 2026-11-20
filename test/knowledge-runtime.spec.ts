@@ -63,7 +63,7 @@ function fixture(mode = 'structured') {
     notes,
     cache,
     settings,
-    project: 'equipment-booking-api',
+    project: 'nest-baseline',
     executable: process.execPath,
   };
   const list = {
@@ -182,7 +182,7 @@ describe('MCP runtime binding and failures', () => {
   it('removes case-insensitive external Basic Memory settings before starting MCP', () => {
     const current = fixture();
     const result = run(current, undefined, {
-      BASIC_MEMORY_PROJECTS: JSON.stringify({ 'equipment-booking-api': { path: current.foreign } }),
+      BASIC_MEMORY_PROJECTS: JSON.stringify({ 'nest-baseline': { path: current.foreign } }),
       basic_memory_default_project: 'foreign',
       Basic_Memory_Database_Url: 'postgresql://example.invalid/foreign',
       BASIC_MEMORY_DATABASE_BACKEND: 'postgres',

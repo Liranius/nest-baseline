@@ -1,14 +1,16 @@
-# equipment-booking-api
+# nest-baseline
 
 ## 项目简介
 
-共享实验室设备预约 API，从 nest-baseline 的 a2cd2af 派生。员工可查询共享设备、预约、取消和查看本人交接进度。管理员按预约办理领用、归还并查阅审计记录。预约确认和取消还会异步通知所属公司，支持按预约排查和重放。[通知演练](docs/notifications.md)
+本仓库包含共享实验室设备预约 API 的完整参考实现，整合自 `equipment-booking-api` 的 `b86fd02`。员工可查询设备、预约、取消和查看交接进度。管理员可办理领用、归还并查阅审计记录。预约确认和取消会异步通知所属公司，支持按预约排查和重放。[通知演练](docs/notifications.md)
 
 业务测试使用 PostgreSQL、两个独立 API 进程、通知 worker 和两个公司的 HTTP 接收端。管理员可为尚未领用的有效预约登记领用地点。阶段 4 在同一个 HAProxy 入口持续接单，演练两个 API 和 worker 的升级、回滚与再发布。[部署操作](docs/stage4-deployment.md) · [验收记录](docs/booking-acceptance.md)
 
 阶段 5 从在线备份恢复到新的 PostgreSQL 实例，并在原入口核对预约、归还和公司的实际收件结果。[备份与恢复演练](docs/stage5-recovery.md)
 
 管理员可为设备安排、查询和撤销维护窗口。双实例下的热门设备抢订可用固定负载重复测量。[维护排期与固定负载复现](docs/booking-setup.md#设备维护窗口)
+
+用普通的 `git clone` 克隆 `nest-baseline` 即可取得服务和演练所需的历史。发布脚本从本仓库的 `82bafe6` 和 `01e2712` 构建旧版和新版镜像。已有浅克隆可先运行 `git fetch --unshallow origin`。[历史版本构建与滚动发布](docs/stage4-deployment.md#从提交构建并执行整场演练)
 
 ## 项目初始化
 
