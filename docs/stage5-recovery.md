@@ -4,10 +4,11 @@
 
 ## 复现
 
-在 WSL Ubuntu 或 Linux 中从仓库根目录执行。使用 Git、Python 3.10+ 和 Docker Compose v2。已有阶段 4 的运行镜像时可直接执行第二条命令。首次构建需要访问镜像仓库和 npm。
+在 WSL Ubuntu 或 Linux 中从仓库根目录执行。使用 Git、Python 3.10+ 和 Docker Compose v2。已取得新版标签并构建阶段 4 运行镜像时可直接运行恢复演练。首次构建需要访问镜像仓库和 npm。
 
 ```sh
-python3 -B deploy/build.py 01e2712
+git fetch origin tag booking-drill-v2
+python3 -B deploy/build.py booking-drill-v2
 python3 -B deploy/recovery_drill.py --output .tmp/stage5.json
 ```
 

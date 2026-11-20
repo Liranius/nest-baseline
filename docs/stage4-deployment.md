@@ -7,8 +7,9 @@
 在 WSL Ubuntu 或 Linux 中，从仓库根目录执行。需要 Git、Python 3.10+、Docker 和 Compose v2，首次构建需要访问镜像仓库和 npm。构建脚本从 Git 提交提取源码、锁文件和契约，在同一份 Dockerfile 中冻结安装。每个版本的 API、worker 和迁移任务使用同一个运行镜像。旧客户端镜像另外保留阶段 3 的 HTTP 客户端和契约校验器。
 
 ```sh
-python3 -B deploy/build.py 82bafe6 --client
-python3 -B deploy/build.py 01e2712
+git fetch origin tag booking-drill-v1 tag booking-drill-v2
+python3 -B deploy/build.py booking-drill-v1 --client
+python3 -B deploy/build.py booking-drill-v2
 python3 -B deploy/rehearse.py --output .tmp/stage4-run.json
 ```
 
@@ -20,7 +21,7 @@ python3 -B deploy/rehearse.py --output .tmp/stage4-run.json
 
 ```sh
 state="/tmp/booking-stage4-$(date +%s)-$$"
-python3 -B deploy/release.py init --state "$state" --old 82bafe6 --new 01e2712
+python3 -B deploy/release.py init --state "$state" --old booking-drill-v1 --new booking-drill-v2
 python3 -B deploy/release.py status --state "$state"
 python3 -B deploy/release.py upgrade --state "$state"
 python3 -B deploy/release.py rollback --state "$state"

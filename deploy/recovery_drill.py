@@ -9,7 +9,7 @@ import tempfile
 import time
 
 from recovery_store import RecoveryStage, backup, restore, utc
-from release import eventually, http
+from release import NEW_DRILL_REVISION, eventually, http
 
 
 def expect(actual, expected):
@@ -408,7 +408,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     with tempfile.TemporaryDirectory(prefix="booking-recovery-") as tmp:
         root = Path(tmp)
-        stage = RecoveryStage.create(root / "control", "01e2712", "01e2712")
+        stage = RecoveryStage.create(root / "control", NEW_DRILL_REVISION, NEW_DRILL_REVISION)
         archives = root / "archives"
         archives.mkdir(mode=0o700)
         try:
