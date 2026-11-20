@@ -10,7 +10,7 @@
 
 管理员可为设备安排、查询和撤销维护窗口。双实例下的热门设备抢订可用固定负载重复测量。[维护排期与固定负载复现](docs/booking-setup.md#设备维护窗口)
 
-用普通的 `git clone` 克隆 `nest-baseline` 即可取得服务和演练所需的历史。发布脚本从本仓库的 `82bafe6` 和 `01e2712` 构建旧版和新版镜像。已有浅克隆可先运行 `git fetch --unshallow origin`。[历史版本构建与滚动发布](docs/stage4-deployment.md#从提交构建并执行整场演练)
+部署演练使用两个固定标签构建历史镜像。`booking-drill-v1` 指向旧版 `82bafe6`，`booking-drill-v2` 指向新版 `01e2712`。全新克隆后可用 `git fetch origin tag booking-drill-v1 tag booking-drill-v2` 单独取回这两个标签，包括在浅克隆中。[历史版本构建与滚动发布](docs/stage4-deployment.md#从提交构建并执行整场演练)
 
 ## 项目初始化
 

@@ -14,7 +14,7 @@ import subprocess
 import tempfile
 import time
 
-from release import Stage, eventually, http, run
+from release import NEW_DRILL_REVISION, OLD_DRILL_REVISION, Stage, eventually, http, run
 
 
 def millis():
@@ -411,8 +411,8 @@ def exercise(s, out):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--old", default="82bafe6")
-    parser.add_argument("--new", default="01e2712")
+    parser.add_argument("--old", default=OLD_DRILL_REVISION)
+    parser.add_argument("--new", default=NEW_DRILL_REVISION)
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
     with tempfile.TemporaryDirectory(prefix="booking-drill-") as parent:

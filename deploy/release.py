@@ -15,6 +15,8 @@ from urllib.request import Request, urlopen
 from uuid import uuid4
 
 HERE = Path(__file__).resolve().parent
+OLD_DRILL_REVISION = "booking-drill-v1"
+NEW_DRILL_REVISION = "booking-drill-v2"
 
 
 def run(args, **kwargs):
@@ -378,8 +380,8 @@ if __name__ == "__main__":
         action="store_true",
         help="Remove the isolated database volume and control files on down",
     )
-    parser.add_argument("--old", default="82bafe6")
-    parser.add_argument("--new", default="01e2712")
+    parser.add_argument("--old", default=OLD_DRILL_REVISION)
+    parser.add_argument("--new", default=NEW_DRILL_REVISION)
     args = parser.parse_args()
     if args.purge and args.action != "down":
         parser.error("--purge is only valid with down")
