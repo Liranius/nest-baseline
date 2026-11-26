@@ -9,7 +9,9 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource, type Repository } from 'typeorm';
+import { Equipment } from '../database/catalog.entity.js';
 import { AccessGuard, CurrentUser, requireAdmin, type Identity } from '../security/identity.js';
 import { objectInput, timeWindow, uuid } from './input.js';
 import { notFound, rethrowSlotConflict } from './lifecycle.js';
@@ -17,7 +19,10 @@ import { notFound, rethrowSlotConflict } from './lifecycle.js';
 @Controller('v1')
 @UseGuards(AccessGuard)
 export class MaintenanceController {
-  constructor(private readonly db: DataSource) {}
+  constructor(
+    @InjectRepository(Equipment) private readonly equipment: Repository<Equipment>,
+    private readonly db: DataSource,
+  ) {}
 
   @Post('equipment/:id/maintenance-windows')
   async schedule(@CurrentUser() user: Identity, @Param('id') raw: string, @Body() body: unknown) {
@@ -50,10 +55,7 @@ export class MaintenanceController {
     requireAdmin(user);
     const id = uuid(raw);
     const { from, to } = timeWindow(start, end);
-    const [device] = await this.db.query<{ id: string }[]>('SELECT id FROM equipment WHERE id=$1', [
-      id,
-    ]);
-    if (!device) throw notFound();
+    if (!(await this.equipment.existsBy({ id }))) throw notFound();
     return this.db.query(
       `SELECT id, equipment_id AS "equipmentId", starts_at AS "from", ends_at AS "to",
               CASE WHEN cancelled_at IS NULL THEN 'scheduled' ELSE 'cancelled' END AS status,

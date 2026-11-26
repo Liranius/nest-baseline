@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource, type Repository } from 'typeorm';
+import { Reservation } from '../database/reservation.entity.js';
 import { AccessGuard, CurrentUser, requireAdmin, type Identity } from '../security/identity.js';
 import { invalidInput, objectInput, uuid } from './input.js';
 import { conflict, lockReservation, notFound } from './lifecycle.js';
@@ -7,15 +9,19 @@ import { conflict, lockReservation, notFound } from './lifecycle.js';
 @Controller('v1/reservations/:id/pickup-location')
 @UseGuards(AccessGuard)
 export class PickupLocationController {
-  constructor(private readonly db: DataSource) {}
+  constructor(
+    @InjectRepository(Reservation) private readonly reservations: Repository<Reservation>,
+    private readonly db: DataSource,
+  ) {}
   @Get()
   async read(@Param('id') rawId: string, @CurrentUser() user: Identity) {
-    const [row] = await this.db.query<{ pickupLocation: string | null }[]>(
-      'SELECT pickup_location AS "pickupLocation" FROM reservations WHERE id=$1 AND ($2::uuid IS NULL OR employee_id=$2)',
-      [uuid(rawId), user.role === 'admin' ? null : user.id],
-    );
-    if (!row) throw notFound();
-    return row;
+    const id = uuid(rawId);
+    const reservation = await this.reservations.findOne({
+      select: { id: true, pickupLocation: true },
+      where: user.role === 'admin' ? { id } : { id, employeeId: user.id },
+    });
+    if (!reservation) throw notFound();
+    return { pickupLocation: reservation.pickupLocation };
   }
 
   @Put()
@@ -38,10 +44,7 @@ export class PickupLocationController {
           'PICKUP_LOCATION_LOCKED',
           'Location is only editable before checkout on a confirmed reservation',
         );
-      await tx.query('UPDATE reservations SET pickup_location=$2 WHERE id=$1', [
-        id,
-        pickupLocation,
-      ]);
+      await tx.getRepository(Reservation).update(id, { pickupLocation });
     });
     return { pickupLocation };
   }

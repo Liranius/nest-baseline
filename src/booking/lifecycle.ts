@@ -1,15 +1,6 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { QueryFailedError, type EntityManager } from 'typeorm';
-
-export interface Reservation {
-  id: string;
-  equipmentId: string;
-  from: Date;
-  to: Date;
-  status: 'confirmed' | 'cancelled';
-}
-export const reservationFields =
-  'id, equipment_id AS "equipmentId", starts_at AS "from", ends_at AS "to", status';
+import type { ReservationDetails } from '../database/reservation.entity.js';
 
 export const notFound = () =>
   new NotFoundException({ code: 'NOT_FOUND', message: 'Resource not found' });
@@ -52,9 +43,9 @@ export async function recordEvent(
 
 // All transitions lock the reservation first. Physical handovers then lock its device.
 export async function lockReservation(tx: EntityManager, id: string, employeeId?: string) {
-  const [row] = await tx.query<Reservation[]>(
+  const [row] = await tx.query<ReservationDetails[]>(
     `
-    SELECT ${reservationFields}
+    SELECT id, equipment_id AS "equipmentId", starts_at AS "from", ends_at AS "to", status
     FROM reservations WHERE id=$1 AND ($2::uuid IS NULL OR employee_id=$2) FOR NO KEY UPDATE`,
     [id, employeeId ?? null],
   );

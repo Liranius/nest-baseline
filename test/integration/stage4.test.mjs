@@ -29,6 +29,10 @@ await test('pickup location access and edits respect reservation ownership and p
       body: { pickupLocation: 'Lab desk' },
     });
     assert.deepEqual((await owner.request(path)).body, { pickupLocation: 'Lab desk' });
+    assert.deepEqual(await admin.request(path), {
+      status: 200,
+      body: { pickupLocation: 'Lab desk' },
+    });
     assert.equal((await admin.checkout(id)).status, 200);
     assert.equal((await put(admin, 'Other')).body.code, 'PICKUP_LOCATION_LOCKED');
     assert.equal((await admin.receive(id)).status, 200);

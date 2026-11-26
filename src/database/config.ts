@@ -1,5 +1,6 @@
 import type { DataSourceOptions } from 'typeorm';
 import { Account, Equipment } from './catalog.entity.js';
+import { Reservation } from './reservation.entity.js';
 import { BookingSchema1780000000000 } from './initial.migration.js';
 import { EquipmentHandover1795000000000 } from './handover.migration.js';
 
@@ -17,7 +18,7 @@ export function databaseOptions(): DataSourceOptions {
     url,
     synchronize: false,
     migrationsRun: false,
-    entities: [Account, Equipment],
+    entities: [Account, Equipment, Reservation],
     migrations: [
       BookingSchema1780000000000,
       EquipmentHandover1795000000000,

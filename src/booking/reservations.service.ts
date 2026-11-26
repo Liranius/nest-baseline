@@ -1,20 +1,20 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource, type Repository } from 'typeorm';
+import { Reservation, type ReservationDetails } from '../database/reservation.entity.js';
 import {
   conflict,
   lockReservation,
   notFound,
   recordEvent,
   rethrowSlotConflict,
-  reservationFields,
-  type Reservation,
 } from './lifecycle.js';
-
 import { Notifications } from '../notifications/notifications.js';
 
 @Injectable()
 export class ReservationsService {
   constructor(
+    @InjectRepository(Reservation) private readonly reservations: Repository<Reservation>,
     private readonly db: DataSource,
     private readonly notifications: Notifications,
   ) {}
@@ -26,12 +26,10 @@ export class ReservationsService {
         await tx.query('SELECT pg_advisory_xact_lock(hashtextextended($1::text,0))', [
           employeeId + ':' + key,
         ]);
-        const [existing] = await tx.query<Reservation[]>(
-          'SELECT ' +
-            reservationFields +
-            ' FROM reservations WHERE employee_id=$1 AND idempotency_key=$2',
-          [employeeId, key],
-        );
+        const existing = await tx.getRepository(Reservation).findOne({
+          select: { id: true, equipmentId: true, from: true, to: true },
+          where: { employeeId, idempotencyKey: key },
+        });
         if (existing) {
           if (
             existing.equipmentId !== equipmentId ||
@@ -65,11 +63,11 @@ export class ReservationsService {
     }
   }
 
-  async read(employeeId: string, id: string) {
-    const [reservation] = await this.db.query<Reservation[]>(
-      'SELECT ' + reservationFields + ' FROM reservations WHERE employee_id=$1 AND id=$2',
-      [employeeId, id],
-    );
+  async read(employeeId: string, id: string): Promise<ReservationDetails> {
+    const reservation = await this.reservations.findOne({
+      select: { id: true, equipmentId: true, from: true, to: true, status: true },
+      where: { employeeId, id },
+    });
     if (!reservation) throw notFound();
     return reservation;
   }
@@ -84,7 +82,7 @@ export class ReservationsService {
       );
       if (loan.length)
         throw conflict('HANDOVER_EXISTS', 'A reservation with a handover cannot be cancelled');
-      await tx.query("UPDATE reservations SET status='cancelled' WHERE id=$1", [id]);
+      await tx.getRepository(Reservation).update(id, { status: 'cancelled' });
       await recordEvent(tx, id, employeeId, 'cancelled');
       await this.notifications.enqueue(tx, id, 2);
     });

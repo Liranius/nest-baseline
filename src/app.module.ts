@@ -12,6 +12,7 @@ import { ReservationsService } from './booking/reservations.service.js';
 import { ApiErrorFilter } from './booking/api-error.filter.js';
 import { APP_FILTER } from '@nestjs/core';
 import { Account, Equipment } from './database/catalog.entity.js';
+import { Reservation } from './database/reservation.entity.js';
 import { databaseOptions } from './database/config.js';
 import { AccessGuard, IdentityController } from './security/identity.js';
 
@@ -25,7 +26,7 @@ import { ReadinessController } from './readiness.controller.js';
   imports: [
     NotificationsModule.register(false),
     TypeOrmModule.forRootAsync({ useFactory: databaseOptions }),
-    TypeOrmModule.forFeature([Account, Equipment]),
+    TypeOrmModule.forFeature([Account, Equipment, Reservation]),
     JwtModule.registerAsync({
       useFactory: () => {
         const secret = process.env.JWT_SECRET;
