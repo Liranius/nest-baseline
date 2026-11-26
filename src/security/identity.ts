@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import type { Request } from 'express';
+import type { IncomingMessage } from 'node:http';
 import type { Repository } from 'typeorm';
 import { Account } from '../database/catalog.entity.js';
 import { invalidInput, objectInput } from '../booking/input.js';
@@ -26,7 +26,7 @@ export function requireAdmin(user: Identity) {
     throw new ForbiddenException({ code: 'FORBIDDEN', message: 'Lab administrator required' });
 }
 
-interface AuthRequest extends Request {
+interface AuthRequest extends IncomingMessage {
   principal: Identity;
 }
 const denied = () =>

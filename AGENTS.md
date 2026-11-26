@@ -50,6 +50,6 @@
 
 请求校验可使用 Zod、Valibot、ArkType 等遵循 Standard Schema 的库。把 `StandardSchemaValidationPipe` 与 `@Body({ schema })` 或 `@Param('id', { schema })` 配合使用即可，无需定义类或提供装饰器元数据。使用 `class-validator` 时，通过 `ValidationPipe` 校验。[校验文档](https://docs.nestjs.com/application/validation.md)
 
-Nest 的性能文档将 `@nestjs/platform-node` 提供的 `NodeAdapter` 列为最快的 HTTP 适配器，吞吐量高于 Fastify。[HTTP 性能文档](https://docs.nestjs.com/http/performance.md)
+API、Webhook 接收端和 HTTP 端到端测试均显式使用 `@nestjs/platform-node` 的 `NodeAdapter`。[HTTP 性能文档](https://docs.nestjs.com/http/performance.md)
 
 Nest 的包仅提供 ESM，本项目也使用 ESM。相对导入路径以 `.js` 结尾，获取当前目录用 `import.meta.dirname`。测试由 Vitest 运行，创建模拟函数用 `vi.fn()`。

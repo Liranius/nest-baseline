@@ -9,6 +9,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NodeAdapter } from '@nestjs/platform-node';
 import { VerifyWebhook, WebhooksModule } from '@nestjs/webhooks';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
@@ -99,7 +100,7 @@ if (process.argv[2] === 'migrate') {
     controllers: [Receiver],
   })
   class ReceiverModule {}
-  const app = await NestFactory.create(ReceiverModule, { rawBody: true });
+  const app = await NestFactory.create(ReceiverModule, new NodeAdapter(), { rawBody: true });
   app.enableShutdownHooks();
   await app.listen(parsePort(process.env.PORT), '127.0.0.1');
   console.log('Notification receiver ready:', await app.getUrl());
