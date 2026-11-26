@@ -167,11 +167,13 @@ await test('two API processes race a maintenance window against a reservation or
       'temporarily-missing',
     ]);
     assert.equal((await fetch(urls[0] + '/health/ready')).status, 503);
+    assert.equal((await fetch(urls[0] + '/', { method: 'HEAD' })).status, 503);
     await sql.query('UPDATE migrations SET name=$1 WHERE name=$2', [
       migration,
       'temporarily-missing',
     ]);
     assert.equal((await fetch(urls[1] + '/health/ready')).status, 200);
+    assert.equal((await fetch(urls[1] + '/', { method: 'HEAD' })).status, 200);
   });
 });
 

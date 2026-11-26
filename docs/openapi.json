@@ -1493,6 +1493,16 @@
         }
       }
     },
+    "/": {
+      "head": {
+        "operationId": "probeReadiness",
+        "security": [],
+        "responses": {
+          "200": { "description": "Ready to receive traffic" },
+          "503": { "description": "Required database schema or subscriptions unavailable" }
+        }
+      }
+    },
     "/health/ready": {
       "get": {
         "operationId": "readiness",
